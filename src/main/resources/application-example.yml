@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: member-service-dev
+  output:
+    ansi.enabled: ALWAYS
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/socketing_member
+    username: username
+    password: password
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+
+  jpa:
+    database: postgresql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
