@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
+    id("com.diffplug.spotless") version "7.0.2"
 }
 
 group = "com.jeein"
@@ -10,6 +11,36 @@ version = "0.0.1-SNAPSHOT"
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+spotless {
+    java {
+        removeUnusedImports()
+        importOrder()
+        googleJavaFormat().aosp()
+    }
+
+    kotlinGradle {
+        target("**/*.gradle.kts", "*.gradle.kts")
+
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    val prettierConfig by extra("$rootDir/.prettierrc.yml")
+
+    format("markdown") {
+        target("**/*.md", "*.md")
+
+        prettier().configFile(prettierConfig)
+    }
+
+    format("yaml") {
+        target("*.yml", "src/main/resources/*.yml")
+
+        prettier().configFile(prettierConfig)
     }
 }
 
@@ -39,3 +70,14 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok")
 }
 
+tasks.register("lintCheck") {
+    dependsOn("spotlessCheck")
+
+    doLast {
+        println("\u001B[32m✔ Lint check completed successfully!\u001B[0m")
+    }
+}
+
+tasks.register("lintApply") {
+    dependsOn("spotlessApply")
+}
