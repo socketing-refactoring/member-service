@@ -1,0 +1,3 @@
+networks:
+  shared-network:
+    driver: bridge

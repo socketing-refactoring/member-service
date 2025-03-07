@@ -38,3 +38,7 @@ out/
 
 ### properties ###
 src/main/resources/application-dev.yml
+.env
+
+### logs ###
+logs

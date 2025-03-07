@@ -1,3 +1,3 @@
 spring:
   profiles:
-    active: "dev"
+    active: dev # Add 'local' profile for console log

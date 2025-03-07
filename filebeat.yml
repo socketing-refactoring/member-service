@@ -1,0 +1,37 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/app/api.log
+    fields:
+      server_name: "member-service"
+      environment: "dev"
+      log_type: api
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/app/general.log
+    exclude_lines:
+      - "^Caused by:"
+      - "^ *at "
+      - "^ *\.\.\."
+    fields:
+      server_name: "member-service"
+      environment: "dev"
+      log_type: general
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/app/jdbc.log
+    fields:
+      server_name: "member-service"
+      environment: "dev"
+      log_type: jdbc
+    fields_under_root: true
+
+output.logstash:
+  hosts: ["logstash:5044"]

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}][%thread] %-5level %logger{36} - %msg%n" />
+    <property name="LOG_PATH" value="./logs"/>
+
+    <!-- 콘솔 로그 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- API 로그 파일 -->
+    <appender name="API_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/api.log</file>
+        <encoder><pattern>${LOG_PATTERN}</pattern></encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/api-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 일반 로그 파일 -->
+    <appender name="GENERAL_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/general.log</file>
+        <encoder><pattern>${LOG_PATTERN}</pattern></encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/general-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- JDBC 로그 파일 -->
+    <appender name="JDBC_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/jdbc.log</file>
+        <encoder><pattern>${LOG_PATTERN}</pattern></encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM, aux}/jdbc-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- dev 프로파일 로깅 설정 -->
+    <springProfile name="dev">
+        <logger name="org.hibernate.SQL" level="TRACE" additivity="false">
+            <appender-ref ref="JDBC_LOG"/>
+        </logger>
+
+    <!--    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">-->
+    <!--        <appender-ref ref="JDBC_LOG"/>-->
+    <!--    </logger>-->
+
+        <logger name="org.hibernate.orm.schema" level="TRACE" additivity="false">
+            <appender-ref ref="JDBC_LOG"/>
+        </logger>
+
+        <logger name="com.jeein.member.LoggingFilter" level="INFO" additivity="false">
+            <appender-ref ref="API_LOG" />
+        </logger>
+
+        <logger name="ROOT" level="INFO">
+            <appender-ref ref="GENERAL_LOG" />
+        </logger>
+    </springProfile>
+
+    <!-- local 프로파일 로깅 설정 -->
+    <springProfile name="local">
+        <logger name="org.hibernate.SQL" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <logger name="org.hibernate.orm.schema" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <logger name="com.jeein.member.LoggingFilter" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="com.jeein.member" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="ROOT" level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+</configuration>

@@ -1,0 +1,8 @@
+services:
+  spring-boot:
+    image: spring-boot-app
+    container_name: spring-boot-container
+    networks:
+      - shared-network
+    volumes:
+      - ./logs:/var/log/app
