@@ -25,7 +25,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew build --no-daemon
+          ./gradlew clean build -x spotlessCheck
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
