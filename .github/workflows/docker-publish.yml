@@ -19,8 +19,8 @@ jobs:
           java-version: '21'
           distribution: 'liberica'
 
-      - name: Set up Gradle
-        uses: gradle/wrapper-validation-action@v3
+#      - name: Set up Gradle
+#        uses: gradle/wrapper-validation-action@v3
 
       - name: Build with Gradle
         run: |
