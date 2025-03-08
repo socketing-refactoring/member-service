@@ -9,4 +9,4 @@ COPY member.jar /app/member.jar
 RUN ls -l /app
 
 # Run the jar file with java
-ENTRYPOINT ["java", "-jar", "member.jar"]
+ENTRYPOINT ["java", "-jar", "member-service.jar"]

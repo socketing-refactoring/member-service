@@ -81,3 +81,7 @@ tasks.register("lintCheck") {
 tasks.register("lintApply") {
     dependsOn("spotlessApply")
 }
+
+tasks.bootJar {
+    archiveFileName.set("member-service.jar")
+}
