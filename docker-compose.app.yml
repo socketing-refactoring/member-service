@@ -2,7 +2,9 @@ services:
   spring-boot:
     image: spring-boot-app
     container_name: spring-boot-container
+    ports:
+      - "8081:8081"
     networks:
-      - shared-network
+      - member-network
     volumes:
       - ./logs:/var/log/app
