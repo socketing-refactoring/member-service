@@ -44,14 +44,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/socketing:member-service
 
-      - name: Copy docker-compose.app.yml to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          source: ./docker-compose.app.yml
-          target: /home/ubuntu/member-service/app/docker-compose.app.yml
+      - name: Setup SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ec2.pem
+          sudo chmod 600 ec2.pem
+#          mkdir -p ~/.ssh
+#          ssh-keyscan ${{ secrets.EC2_HOST}} >> ~/.ssh/known_hosts
+
+      - name: Copy docker-compose.yml to EC2
+        run: |
+          scp -i ec2.pem -o StrictHostKeyChecking=no ./docker-compose.app.yml "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/member-service/app/docker-compose.app.yml"
+          sudo rm -f ec2.pem
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -60,7 +63,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            cd member-service
+            cd member-service/app
             echo "SPRING_CLOUD_CONFIG_URI=${{ secrets.SPRING_CLOUD_CONFIG_URI }}" > .env
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             mkdir -p logs

@@ -3,7 +3,7 @@ networks:
     driver: bridge
 
 services:
-  spring-boot:
+  member:
     image: ${DOCKER_USERNAME}/socketing:member-service
     container_name: member-service-app
     ports:
