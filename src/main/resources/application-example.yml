@@ -1,46 +1,10 @@
-server:
-  port: 8081
-
 spring:
-  application:
-    name: member-service-dev
-  output:
-    ansi.enabled: ALWAYS
+  profiles:
+    active: dev, local # Add 'local' profile for console log
 
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/socketing_member
-    username: username
-    password: password
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-
-  jpa:
-    database: postgresql
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        highlight_sql: true
-
-logging:
-  config: classpath:logback-spring.xml
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  show-actuator: true
-  swagger-ui:
-    path: /api-docs
-    operations-sorter: alpha
-    disable-swagger-default-url: false
-    display-request-duration: true
+  config:
+    import: ${SPRING_CLOUD_CONFIG_URI}
+  cloud:
+    config:
+      name: member-service
+      profile: dev

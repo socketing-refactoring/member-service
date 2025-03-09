@@ -19,8 +19,9 @@ jobs:
           java-version: '21'
           distribution: 'liberica'
 
-#      - name: Set up Gradle
-#        uses: gradle/wrapper-validation-action@v3
+      - name: Create application.yml from GitHub Secrets
+        run: |
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: Build with Gradle
         run: |
