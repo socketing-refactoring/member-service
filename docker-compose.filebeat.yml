@@ -1,9 +1,0 @@
-services:
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
-    container_name: filebeat-container
-    networks:
-      - shared-network
-    volumes:
-      - ./logs:/var/log/app
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
