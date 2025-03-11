@@ -1,6 +1,8 @@
 spring:
+  application:
+    name: member-service-dev
   profiles:
-    active: dev, local # Add 'local' profile for console log
+    active: dev
 
   config:
     import: ${SPRING_CLOUD_CONFIG_URI}
