@@ -1,6 +1,4 @@
-networks:
-  member-network:
-    driver: bridge
+# docker network member-network
 
 services:
   member:
@@ -12,3 +10,7 @@ services:
       - member-network
     volumes:
       - ./logs:/app/logs
+
+networks:
+  member-network:
+    external: true
