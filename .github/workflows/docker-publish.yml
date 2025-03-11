@@ -49,8 +49,25 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ec2.pem
           sudo chmod 600 ec2.pem
-#          mkdir -p ~/.ssh
-#          ssh-keyscan ${{ secrets.EC2_HOST}} >> ~/.ssh/known_hosts
+
+      - name: Set up WARP
+        uses: fscarmen/warp-on-actions@v1.1
+        with:
+          stack: dual
+
+      - name: testing ipv6 for command
+        run: |
+          curl -m 9 --ipv6 --verbose https://google.com
+
+      - name: Set up Server Home directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          protocol: tcp6
+          script: |
+            mkdir -p member-service/app/logs
 
       - name: Copy docker-compose.yml to EC2
         run: |
@@ -63,6 +80,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          protocol: tcp6
           script: |
             cd member-service/app
             echo "SPRING_CLOUD_CONFIG_URI=${{ secrets.SPRING_CLOUD_CONFIG_URI }}" > .env
