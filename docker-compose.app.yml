@@ -11,4 +11,4 @@ services:
     networks:
       - member-network
     volumes:
-      - ./logs:/var/log/app
+      - ./logs:/app/logs

@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  push_to_docker_hub:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:

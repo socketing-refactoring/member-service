@@ -26,6 +26,11 @@ spring:
 #        format_sql: true
 #        highlight_sql: true
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
 logging:
   config: classpath:logback-spring.xml
 
@@ -33,7 +38,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health, prometheus, refresh
+  endpoint:
+    prometheus:
+      enabled: true
 
 springdoc:
   default-consumes-media-type: application/json
