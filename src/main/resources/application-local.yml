@@ -1,0 +1,53 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://43.201.255.187:5432/member_domain
+    username: jeein
+    password: 93671665
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
+logging:
+  level:
+    root: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.springframework.orm.jpa: debug
+    org.springframework.transaction: debug
+    org.springframework.web: debug
+    org.springframework.web.servlet: debug
+    org.springframework.web.client: debug
+    org.springframework.boot.web: debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  show-actuator: true
+  api-docs:
+    path: /apis
+  swagger-ui:
+    path: /api-docs
+    url: /apis
+    operations-sorter: alpha
+    disable-swagger-default-url: false
+    display-request-duration: true

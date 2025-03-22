@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<CommonResponseDTO<Object>> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
+        e.printStackTrace();
         CommonResponseDTO<Object> response =
                 CommonResponseDTO.error(ErrorCode.INVALID_REQUEST_VALUE, e.getBindingResult());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

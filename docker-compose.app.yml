@@ -1,16 +1,7 @@
-# docker network member-network
-
 services:
   member:
     image: ${DOCKER_USERNAME}/socketing:member-service
+    network_mode: host
     container_name: member-service-app
-    ports:
-      - "8081:8081"
-    networks:
-      - member-network
     volumes:
       - ./logs:/app/logs
-
-networks:
-  member-network:
-    external: true
