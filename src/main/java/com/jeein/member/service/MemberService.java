@@ -3,6 +3,8 @@ package com.jeein.member.service;
 import com.jeein.member.dto.common.CommonResponseDTO;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.dto.request.LoginRequestDTO;
+import com.jeein.member.dto.request.UpdateNicknameRequestDTO;
+import com.jeein.member.dto.request.UpdatePasswordRequestDTO;
 import com.jeein.member.dto.response.GetMemberResponseDTO;
 import com.jeein.member.dto.response.JoinResponseDTO;
 import com.jeein.member.dto.response.LoginResponseDTO;
@@ -13,6 +15,8 @@ import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.exception.MemberException;
 import com.jeein.member.exception.UnknownException;
 import com.jeein.member.repository.MemberRepository;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,7 +59,7 @@ public class MemberService {
                 .findByEmail(member.getEmail())
                 .ifPresent(
                         existingMember -> {
-                            throw new MemberException(ErrorCode.EMAIL_ALREADY_EXISTS);
+                            throw new MemberException(ErrorCode.ALREADY_EXISTING_EMAIL);
                         });
 
         // 닉네임 중복 예외 처리
@@ -63,7 +67,7 @@ public class MemberService {
                 .findByNickname(member.getNickname())
                 .ifPresent(
                         existingMember -> {
-                            throw new MemberException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+                            throw new MemberException(ErrorCode.ALREADY_EXISTING_NICKNAME);
                         });
 
         // Member, MemberDetail 저장
@@ -88,7 +92,7 @@ public class MemberService {
         // 비밀번호 검증
         if (!BCrypt.checkpw(
                 loginRequestDTO.getPassword(), member.getMemberDetail().getPassword())) {
-            throw new MemberException(ErrorCode.PASSWORD_FAILED);
+            throw new MemberException(ErrorCode.INVALID_PASSWORD);
         }
 
         log.debug("login member: {}", member);
@@ -124,7 +128,7 @@ public class MemberService {
     // 닉네임 업데이트
     @Transactional
     public CommonResponseDTO<UpdateNicknameResponseDTO> updateNickname(
-            String id, String newNickname) throws UnknownException {
+            String id, UpdateNicknameRequestDTO updateNicknameRequest) throws UnknownException {
         // 회원 조회
         Member member =
                 memberRepository
@@ -133,21 +137,23 @@ public class MemberService {
         log.debug("selected member: {}", member);
 
         // 동일한 닉네임인지 검사
+        String newNickname = updateNicknameRequest.getNickname();
         if (member.getNickname().equals(newNickname)) {
             throw new MemberException(ErrorCode.UNCHANGED_NICKNAME);
         }
 
         // 닉네임 업데이트
         member.updateNickname(newNickname);
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        log.debug("saved member: {}", savedMember);
 
         return CommonResponseDTO.success(
-                "닉네임 변경이 성공적으로 이루어졌습니다.", "0", UpdateNicknameResponseDTO.fromEntity(member));
+                "닉네임 변경이 성공적으로 이루어졌습니다.", "0", UpdateNicknameResponseDTO.fromEntity(savedMember));
     }
 
     // 비밀번호 업데이트
     @Transactional
-    public CommonResponseDTO<Void> updatePassword(String id, String newPassword)
+    public CommonResponseDTO<Void> updatePassword(String id, UpdatePasswordRequestDTO updatePasswordRequest)
             throws UnknownException {
         // 회원 조회
         Member member =
@@ -157,6 +163,7 @@ public class MemberService {
         log.debug("selected member: {}", member);
 
         // 동일한 비밀번호인지 검사
+        String newPassword = updatePasswordRequest.getPassword();
         if (member.getMemberDetail().getPassword().equals(newPassword)) {
             throw new MemberException(ErrorCode.UNCHANGED_PASSWORD);
         }
@@ -177,7 +184,7 @@ public class MemberService {
                         .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
         log.debug("selected member: {}", member);
 
-        memberRepository.softDelete(member.getId());
+        memberRepository.softDelete(member.getId(), Instant.now());
 
         return CommonResponseDTO.success("회원 탈퇴가 성공적으로 이루어졌습니다.", "0", null);
     }

@@ -3,6 +3,8 @@ package com.jeein.member.controller;
 import com.jeein.member.dto.common.CommonResponseDTO;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.dto.request.LoginRequestDTO;
+import com.jeein.member.dto.request.UpdateNicknameRequestDTO;
+import com.jeein.member.dto.request.UpdatePasswordRequestDTO;
 import com.jeein.member.dto.response.*;
 import com.jeein.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -32,17 +34,17 @@ public class MemberController {
     }
 
     // 닉네임 업데이트
-    @PutMapping("/{id}/nickname")
+    @PatchMapping("/{id}/nickname")
     public ResponseEntity<CommonResponseDTO<UpdateNicknameResponseDTO>> updateNickname(
-            @PathVariable String id, @Valid @RequestBody String nickname) {
-        return ResponseEntity.ok(memberService.updateNickname(id, nickname));
+            @PathVariable String id, @Valid @RequestBody UpdateNicknameRequestDTO updateNicknameRequest) {
+        return ResponseEntity.ok(memberService.updateNickname(id, updateNicknameRequest));
     }
 
     // 비밀번호 업데이트
-    @PutMapping("/{id}/password")
+    @PatchMapping("/{id}/password")
     public ResponseEntity<CommonResponseDTO<Void>> updatePassword(
-            @PathVariable String id, @Valid @RequestBody String password) {
-        return ResponseEntity.ok(memberService.updatePassword(id, password));
+            @PathVariable String id, @Valid @RequestBody UpdatePasswordRequestDTO updatePasswordRequest) {
+        return ResponseEntity.ok(memberService.updatePassword(id, updatePasswordRequest));
     }
 
     // 회원 삭제
@@ -56,15 +58,15 @@ public class MemberController {
     ----------------------------------*/
     // 새로운 회원 등록
     @PostMapping("/join")
-    public CommonResponseDTO<JoinResponseDTO> joinMember(
+    public ResponseEntity<CommonResponseDTO<JoinResponseDTO>> joinMember(
             @Valid @RequestBody JoinRequestDTO joinRequestDTO) {
-        return memberService.joinMember(joinRequestDTO);
+        return ResponseEntity.ok(memberService.joinMember(joinRequestDTO));
     }
 
     // 회원 로그인 인증
     @PostMapping("/login")
-    public CommonResponseDTO<LoginResponseDTO> loginRequestDTO(
+    public ResponseEntity<CommonResponseDTO<LoginResponseDTO>> loginRequestDTO(
             @Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-        return memberService.loginMember(loginRequestDTO);
+        return ResponseEntity.ok(memberService.loginMember(loginRequestDTO));
     }
 }

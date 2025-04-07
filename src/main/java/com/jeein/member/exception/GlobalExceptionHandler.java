@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnknownException.class)
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MemberException.class)
     protected ResponseEntity<CommonResponseDTO<Object>> handleMemberException(MemberException e) {
         CommonResponseDTO<Object> response =
-                CommonResponseDTO.error(e.getErrorCode(), new ArrayList<>());
+                CommonResponseDTO.error(e.getErrorCode());
         return new ResponseEntity<>(response, e.getErrorCode().getStatus());
     }
 }

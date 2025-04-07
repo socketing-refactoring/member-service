@@ -39,6 +39,10 @@ public class CommonResponseDTO<T> {
         return new CommonResponseDTO<>(message, code, data);
     }
 
+    public static CommonResponseDTO<Object> error(ErrorCode errorCode) {
+        return new CommonResponseDTO<>(errorCode.getMessage(), errorCode.getCode(), null);
+    }
+
     public static CommonResponseDTO<Object> error(ErrorCode errorCode, List<FieldError> errors) {
         return new CommonResponseDTO<>(errorCode.getMessage(), errorCode.getCode(), errors);
     }
