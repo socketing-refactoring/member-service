@@ -33,6 +33,6 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     @Modifying(clearAutomatically = true)
     @Query(
-            "UPDATE Member m SET m.deletedAt =: now WHERE m.id = :id AND m.deletedAt IS NULL")
+            "UPDATE Member m SET m.deletedAt = :now WHERE m.id = :id AND m.deletedAt IS NULL")
     void softDelete(@Param("id") UUID id, @Param("now") Instant now);
 }

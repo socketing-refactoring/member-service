@@ -8,12 +8,14 @@ import lombok.Getter;
 @Builder
 public class JoinResponseDTO {
     private String id;
+    private String name;
     private String nickname;
     private String email;
 
     public static JoinResponseDTO fromEntity(Member member) {
         return JoinResponseDTO.builder()
                 .id(member.getId().toString())
+                .name(member.getName())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .build();

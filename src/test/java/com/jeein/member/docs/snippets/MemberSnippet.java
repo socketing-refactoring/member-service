@@ -12,4 +12,9 @@ public static final RequestFieldsSnippet MEMBER_JOIN_REQUEST_FIELDS = requestFie
             fieldWithPath("nickname").optional().description("닉네임"),
             fieldWithPath("password").description("비밀번호")
     );
+
+    public static final RequestFieldsSnippet MEMBER_LOGIN_REQUEST_FIELDS = requestFields(
+            fieldWithPath("email").description("이메일"),
+            fieldWithPath("password").description("비밀번호")
+    );
 }

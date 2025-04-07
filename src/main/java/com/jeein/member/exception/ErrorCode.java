@@ -16,10 +16,11 @@ public enum ErrorCode {
     REQUEST_MAPPING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S_002", "요청 데이터 처리에 오류가 발생했습니다"),
     TOKEN_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S_003", "인증 처리에 오류가 발생했습니다."),
 
-    ALREADY_EXISTING_EMAIL(HttpStatus.CONFLICT, "A_001", "이미 가입된 계정입니다."),
-    ALREADY_EXISTING_NICKNAME(HttpStatus.CONFLICT, "A_002", "사용 중인 닉네임입니다."),
-    INVALID_TOKEN(HttpStatus.FORBIDDEN, "A_003", "접근이 허용되지 않은 사용자입니다"),
-    INVALID_PASSWORD(HttpStatus.FORBIDDEN, "A_004", "비밀번호를 다시 확인해 주세요."),
+    ALREADY_EXISTING_EMAIL(HttpStatus.CONFLICT, "AJ_001", "이미 가입된 계정입니다."),
+    ALREADY_EXISTING_NICKNAME(HttpStatus.CONFLICT, "AJ_002", "사용 중인 닉네임입니다."),
+    INVALID_MEMBER(HttpStatus.FORBIDDEN, "AL_001", "가입되지 않은 사용자입니다."),
+    INVALID_PASSWORD(HttpStatus.FORBIDDEN, "AL_001", "비밀번호를 다시 확인해 주세요."),
+    INVALID_TOKEN(HttpStatus.FORBIDDEN, "AT_005", "접근이 허용되지 않은 사용자입니다"),
 
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M_001", "회원 정보를 찾을 수 없습니다."),
     UNCHANGED_PASSWORD(HttpStatus.BAD_REQUEST, "M_002", "새로운 비밀번호를 입력해 주세요."),

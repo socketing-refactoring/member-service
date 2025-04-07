@@ -1,9 +1,9 @@
-package com.jeein.member.docs.join;
+package com.jeein.member.docs.login;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
-import com.jeein.member.dto.request.JoinRequestDTO;
+import com.jeein.member.dto.request.LoginRequestDTO;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 import static com.jeein.member.docs.DocumentIdentifier.*;
 import static com.jeein.member.docs.RestDocsUtil.doc;
 import static com.jeein.member.docs.snippets.CommonSnippet.CommonDescriptor.errorResponseFields;
-import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS;
+import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_LOGIN_REQUEST_FIELDS;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -43,9 +43,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ExtendWith(RestDocumentationExtension.class)
-@Import(JoinRequestValidationTest.TestMockConfig.class)
-@DisplayName("회원가입 요청 유효성 예외 테스트")
-public class JoinRequestValidationTest {
+@Import(LoginRequestValidationTest.TestMockConfig.class)
+@DisplayName("로그인 요청 유효성 예외 테스트")
+public class LoginRequestValidationTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -79,66 +79,48 @@ public class JoinRequestValidationTest {
         return copy;
     }
 
-    private static Stream<Arguments> provideInvalidJoinRequests() {
-        JoinRequestDTO validRequestDto = JoinRequestDTO.of("test@example.com", "홍길동", "길동이", "password123");
+    private static Stream<Arguments> provideInvalidLoginRequests() {
+        LoginRequestDTO validRequestDto = LoginRequestDTO.of("test@example.com", "password123");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> validMap = mapper.convertValue(validRequestDto, new TypeReference<>() {});
 
         return Stream.of(
                 emailValidationCases(validMap),
-                nameValidationCases(validMap),
-                nicknameValidationCases(validMap),
                 passwordValidationCases(validMap)
         ).flatMap(Function.identity());
     }
 
     private static Stream<Arguments> emailValidationCases(Map<String, String> base) {
         return Stream.of(
-                Arguments.of("이메일 패턴 유효하지 않음", CreateInvalidMapWithField(base, "email", "invalid-email"), "email", JOIN_VALIDATION_EMAIL + "/pattern"),
-                Arguments.of("이메일 빈 문자열", CreateInvalidMapWithField(base, "email", ""), "email", JOIN_VALIDATION_EMAIL + "/blank"),
-                Arguments.of("이메일 null", CreateInvalidMapWithField(base, "email", null), "email", JOIN_VALIDATION_EMAIL + "/null"),
-                Arguments.of("이메일 50자 초과", CreateInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"), "email", JOIN_VALIDATION_EMAIL + "/size")
-        );
-    }
-
-    private static Stream<Arguments> nameValidationCases(Map<String, String> base) {
-        return Stream.of(
-                Arguments.of("이름 빈 문자열", CreateInvalidMapWithField(base, "name", ""), "name", JOIN_VALIDATION_NAME + "/blank"),
-                Arguments.of("이름 null", CreateInvalidMapWithField(base, "name", null), "name", JOIN_VALIDATION_NAME + "/null"),
-                Arguments.of("이름 20자 초과", CreateInvalidMapWithField(base, "name", "a".repeat(21)), "name", JOIN_VALIDATION_NAME + "/size")
-        );
-    }
-
-    private static Stream<Arguments> nicknameValidationCases(Map<String, String> base) {
-        return Stream.of(
-                Arguments.of("닉네임 빈 문자열", CreateInvalidMapWithField(base, "nickname", ""), "nickname", JOIN_VALIDATION_NICKNAME + "/blank"),
-                Arguments.of("닉네임 null", CreateInvalidMapWithField(base, "nickname", null), "nickname", JOIN_VALIDATION_NICKNAME + "/null"),
-                Arguments.of("닉네임 20자 초과", CreateInvalidMapWithField(base, "nickname", "a".repeat(21)), "nickname", JOIN_VALIDATION_NICKNAME + "/size")
+                Arguments.of("이메일 패턴 유효하지 않음", CreateInvalidMapWithField(base, "email", "invalid-email"), "email", LOGIN_VALIDATION_EMAIL + "/pattern"),
+                Arguments.of("이메일 빈 문자열", CreateInvalidMapWithField(base, "email", ""), "email", LOGIN_VALIDATION_EMAIL + "/blank"),
+                Arguments.of("이메일 null", CreateInvalidMapWithField(base, "email", null), "email", LOGIN_VALIDATION_EMAIL + "/null"),
+                Arguments.of("이메일 50자 초과", CreateInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"), "email", LOGIN_VALIDATION_EMAIL + "/size")
         );
     }
 
     private static Stream<Arguments> passwordValidationCases(Map<String, String> base) {
         return Stream.of(
-                Arguments.of("비밀번호 빈 문자열", CreateInvalidMapWithField(base, "password", ""), "password", JOIN_VALIDATION_PASSWORD + "/blank"),
-                Arguments.of("비밀번호 null", CreateInvalidMapWithField(base, "password", null), "password", JOIN_VALIDATION_PASSWORD + "/null"),
-                Arguments.of("비밀번호 20자 초과", CreateInvalidMapWithField(base, "password", "a".repeat(21)), "password", JOIN_VALIDATION_PASSWORD + "/size")
+                Arguments.of("비밀번호 빈 문자열", CreateInvalidMapWithField(base, "password", ""), "password", LOGIN_VALIDATION_PASSWORD + "/blank"),
+                Arguments.of("비밀번호 null", CreateInvalidMapWithField(base, "password", null), "password", LOGIN_VALIDATION_PASSWORD + "/null"),
+                Arguments.of("비밀번호 20자 초과", CreateInvalidMapWithField(base, "password", "a".repeat(21)), "password", LOGIN_VALIDATION_PASSWORD + "/size")
         );
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
-    @MethodSource("provideInvalidJoinRequests")
-    @DisplayName("회원가입 요청 유효성 검사 실패 시 400 에러와 원인 필드를 반환한다.")
-    void join_withInvalidField_shouldReturnBadRequest(String testName, Map<String, String> requestMap, String expectedField, String docDirectory) throws Exception {
+    @MethodSource("provideInvalidLoginRequests")
+    @DisplayName("로그인 요청 유효성 검사 실패 시 400 에러와 원인 필드를 반환한다.")
+    void login_withInvalidField_shouldReturnBadRequest(String testName, Map<String, String> requestMap, String expectedField, String docDirectory) throws Exception {
         String requestJson = objectMapper.writeValueAsString(requestMap);
 
-        mockMvc.perform(post(ApiPath.MEMBER_JOIN)
+        mockMvc.perform(post(ApiPath.MEMBER_LOGIN)
                 .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ErrorCode.INVALID_REQUEST_VALUE.getCode()))
                 .andExpect(jsonPath("$.message").value(containsString(ErrorCode.INVALID_REQUEST_VALUE.getMessage())))
                 .andExpect(jsonPath("$.errors[0].field").value(expectedField))
                 .andExpect(jsonPath("$.data").doesNotExist())
-                .andDo(doc(docDirectory, MEMBER_JOIN_REQUEST_FIELDS, errorResponseFields()));
+                .andDo(doc(docDirectory, MEMBER_LOGIN_REQUEST_FIELDS, errorResponseFields()));
     }
 
 }

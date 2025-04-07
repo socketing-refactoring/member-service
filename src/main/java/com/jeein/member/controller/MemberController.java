@@ -8,8 +8,11 @@ import com.jeein.member.dto.request.UpdatePasswordRequestDTO;
 import com.jeein.member.dto.response.*;
 import com.jeein.member.service.MemberService;
 import jakarta.validation.Valid;
+
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +63,11 @@ public class MemberController {
     @PostMapping("/join")
     public ResponseEntity<CommonResponseDTO<JoinResponseDTO>> joinMember(
             @Valid @RequestBody JoinRequestDTO joinRequestDTO) {
-        return ResponseEntity.ok(memberService.joinMember(joinRequestDTO));
+        CommonResponseDTO<JoinResponseDTO> response = memberService.joinMember(joinRequestDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .location(URI.create("api/v1/members/" + response.getData().getId()))
+                .body(response);
     }
 
     // 회원 로그인 인증

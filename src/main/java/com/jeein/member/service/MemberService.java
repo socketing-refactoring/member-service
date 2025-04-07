@@ -11,9 +11,9 @@ import com.jeein.member.dto.response.LoginResponseDTO;
 import com.jeein.member.dto.response.UpdateNicknameResponseDTO;
 import com.jeein.member.entity.Member;
 import com.jeein.member.entity.MemberDetail;
+import com.jeein.member.exception.AuthException;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.exception.MemberException;
-import com.jeein.member.exception.UnknownException;
 import com.jeein.member.repository.MemberRepository;
 
 import java.time.Instant;
@@ -26,6 +26,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.jeein.member.ResponseMessage.JOIN_SUCCESS;
+import static com.jeein.member.ResponseMessage.LOGIN_SUCCESS;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,8 +38,7 @@ public class MemberService {
 
     // 회원 등록
     @Transactional
-    public CommonResponseDTO<JoinResponseDTO> joinMember(JoinRequestDTO joinRequestDTO)
-            throws UnknownException {
+    public CommonResponseDTO<JoinResponseDTO> joinMember(JoinRequestDTO joinRequestDTO) {
         // Member 엔티티 생성
         Member member =
                 Member.builder()
@@ -59,7 +61,7 @@ public class MemberService {
                 .findByEmail(member.getEmail())
                 .ifPresent(
                         existingMember -> {
-                            throw new MemberException(ErrorCode.ALREADY_EXISTING_EMAIL);
+                            throw new AuthException(ErrorCode.ALREADY_EXISTING_EMAIL);
                         });
 
         // 닉네임 중복 예외 처리
@@ -67,7 +69,7 @@ public class MemberService {
                 .findByNickname(member.getNickname())
                 .ifPresent(
                         existingMember -> {
-                            throw new MemberException(ErrorCode.ALREADY_EXISTING_NICKNAME);
+                            throw new AuthException(ErrorCode.ALREADY_EXISTING_NICKNAME);
                         });
 
         // Member, MemberDetail 저장
@@ -76,28 +78,27 @@ public class MemberService {
         log.debug("joined member: {}", savedMember);
 
         return CommonResponseDTO.success(
-                "회원가입이 성공적으로 이루어졌습니다.", "0", JoinResponseDTO.fromEntity(savedMember));
+                JOIN_SUCCESS, "0", JoinResponseDTO.fromEntity(savedMember));
     }
 
     // 회원 로그인 인증
     @Transactional
-    public CommonResponseDTO<LoginResponseDTO> loginMember(LoginRequestDTO loginRequestDTO)
-            throws UnknownException {
+    public CommonResponseDTO<LoginResponseDTO> loginMember(LoginRequestDTO loginRequestDTO) {
         // 이메일 검증
         Member member =
                 memberRepository
                         .findMemberWithDetailsByEmail(loginRequestDTO.getEmail())
-                        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                        .orElseThrow(() -> new AuthException(ErrorCode.INVALID_MEMBER));
 
         // 비밀번호 검증
         if (!BCrypt.checkpw(
                 loginRequestDTO.getPassword(), member.getMemberDetail().getPassword())) {
-            throw new MemberException(ErrorCode.INVALID_PASSWORD);
+            throw new AuthException(ErrorCode.INVALID_PASSWORD);
         }
 
         log.debug("login member: {}", member);
         return CommonResponseDTO.success(
-                "로그인이 성공적으로 이루어졌습니다.", "0", LoginResponseDTO.fromEntity(member));
+                LOGIN_SUCCESS, "0", LoginResponseDTO.fromEntity(member));
     }
 
     // 모든 회원 조회
@@ -113,8 +114,7 @@ public class MemberService {
     }
 
     // 특정 회원 조회
-    public CommonResponseDTO<GetMemberResponseDTO> getMemberById(String id)
-            throws UnknownException {
+    public CommonResponseDTO<GetMemberResponseDTO> getMemberById(String id) {
         Member member =
                 memberRepository
                         .findById(UUID.fromString(id))
@@ -128,7 +128,7 @@ public class MemberService {
     // 닉네임 업데이트
     @Transactional
     public CommonResponseDTO<UpdateNicknameResponseDTO> updateNickname(
-            String id, UpdateNicknameRequestDTO updateNicknameRequest) throws UnknownException {
+            String id, UpdateNicknameRequestDTO updateNicknameRequest) {
         // 회원 조회
         Member member =
                 memberRepository
@@ -153,8 +153,7 @@ public class MemberService {
 
     // 비밀번호 업데이트
     @Transactional
-    public CommonResponseDTO<Void> updatePassword(String id, UpdatePasswordRequestDTO updatePasswordRequest)
-            throws UnknownException {
+    public CommonResponseDTO<Void> updatePassword(String id, UpdatePasswordRequestDTO updatePasswordRequest) {
         // 회원 조회
         Member member =
                 memberRepository
@@ -177,7 +176,7 @@ public class MemberService {
 
     // 회원 삭제
     @Transactional
-    public CommonResponseDTO<Void> deleteMember(String id) throws UnknownException {
+    public CommonResponseDTO<Void> deleteMember(String id) {
         Member member =
                 memberRepository
                         .findById(UUID.fromString(id))
