@@ -3,9 +3,16 @@ repos:
     rev: v4.5.0
     hooks:
       - id: commitizen
-        stages: [push]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: check-yaml
       - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      - id: spotless-apply
+        name: apply spotless (java code formatter)
+        language: script
+        entry: scripts/run-spotless.sh
+        pass_filenames: false

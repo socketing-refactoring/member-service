@@ -91,12 +91,16 @@ tasks.register("lintCheck") {
     dependsOn("spotlessCheck")
 
     doLast {
-        println("\u001B[32m✔ Lint check completed successfully!\u001B[0m")
+        println("\u001B[32m✔ spotlessCheck check completed successfully!\u001B[0m")
     }
 }
 
 tasks.register("lintApply") {
     dependsOn("spotlessApply")
+
+    doLast {
+        println("\u001B[32m✔ spotlessApply completed successfully!\u001B[0m")
+    }
 }
 
 tasks.jar {
