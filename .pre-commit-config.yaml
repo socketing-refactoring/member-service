@@ -1,18 +1,25 @@
 repos:
-  - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.5.0
+  - repo: local
     hooks:
-      - id: commitizen
+      - id: spotless-apply
+        name: Apply spotless (java code formatter)
+        language: script
+        entry: scripts/run-spotless.sh
+        pass_filenames: false
+
+      - id: test
+        name: Run gradlew test
+        language: script
+        entry: scripts/run-test.sh
+        pass_filenames: false
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: check-yaml
       - id: check-merge-conflict
 
-  - repo: local
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.5.0
     hooks:
-      - id: spotless-apply
-        name: apply spotless (java code formatter)
-        language: script
-        entry: scripts/run-spotless.sh
-        pass_filenames: false
+      - id: commitizen
