@@ -13,7 +13,7 @@ import lombok.*;
 public class JoinRequestDTO {
 
     @NotEmpty(message = "이메일은 필수입니다.")
-    @Email(message="이메일을 형식에 맞게 입력해 주세요.")
+    @Email(message = "이메일을 형식에 맞게 입력해 주세요.")
     @Size(max = 50, message = "이메일을 50자 이하로 입력해 주세요.")
     private String email;
 

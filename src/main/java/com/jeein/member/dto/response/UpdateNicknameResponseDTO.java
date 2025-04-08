@@ -1,7 +1,6 @@
 package com.jeein.member.dto.response;
 
 import com.jeein.member.entity.Member;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

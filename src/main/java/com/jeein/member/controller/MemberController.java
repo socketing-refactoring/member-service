@@ -8,7 +8,6 @@ import com.jeein.member.dto.request.UpdatePasswordRequestDTO;
 import com.jeein.member.dto.response.*;
 import com.jeein.member.service.MemberService;
 import jakarta.validation.Valid;
-
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +38,16 @@ public class MemberController {
     // 닉네임 업데이트
     @PatchMapping("/{id}/nickname")
     public ResponseEntity<CommonResponseDTO<UpdateNicknameResponseDTO>> updateNickname(
-            @PathVariable String id, @Valid @RequestBody UpdateNicknameRequestDTO updateNicknameRequest) {
+            @PathVariable String id,
+            @Valid @RequestBody UpdateNicknameRequestDTO updateNicknameRequest) {
         return ResponseEntity.ok(memberService.updateNickname(id, updateNicknameRequest));
     }
 
     // 비밀번호 업데이트
     @PatchMapping("/{id}/password")
     public ResponseEntity<CommonResponseDTO<Void>> updatePassword(
-            @PathVariable String id, @Valid @RequestBody UpdatePasswordRequestDTO updatePasswordRequest) {
+            @PathVariable String id,
+            @Valid @RequestBody UpdatePasswordRequestDTO updatePasswordRequest) {
         return ResponseEntity.ok(memberService.updatePassword(id, updatePasswordRequest));
     }
 

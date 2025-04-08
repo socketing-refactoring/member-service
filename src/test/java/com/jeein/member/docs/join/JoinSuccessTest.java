@@ -4,7 +4,7 @@ import static com.jeein.member.ResponseMessage.JOIN_SUCCESS;
 import static com.jeein.member.docs.DocumentIdentifier.JOIN_SUCCESS_BASE;
 import static com.jeein.member.docs.DocumentIdentifier.JOIN_SUCCESS_CASE;
 import static com.jeein.member.docs.RestDocsUtil.doc;
-import static com.jeein.member.docs.snippets.CommonSnippet.CommonDescriptor.*;
+import static com.jeein.member.docs.snippets.CommonSnippet.successResponseWithDataFields;
 import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -35,25 +35,25 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith(RestDocumentationExtension.class)
 public class JoinSuccessTest {
 
-    @Autowired
-    private WebApplicationContext context;
+    @Autowired private WebApplicationContext context;
 
-    @Autowired
-    private MemberService memberService;
+    @Autowired private MemberService memberService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation))
-                .defaultRequest(get("/")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .build();
+    void setUp(
+            WebApplicationContext webApplicationContext,
+            RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc =
+                MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                        .apply(documentationConfiguration(restDocumentation))
+                        .defaultRequest(
+                                get("/").accept(MediaType.APPLICATION_JSON)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .build();
     }
 
     @Test
@@ -61,8 +61,7 @@ public class JoinSuccessTest {
     void joinMember_success() throws Exception {
         JoinRequestDTO request = JoinRequestDTO.of("email@example.com", "이름", "닉네임", "password");
 
-        mockMvc.perform(post(ApiPath.MEMBER_JOIN)
-                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(post(ApiPath.MEMBER_JOIN).content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.message").value(JOIN_SUCCESS))
@@ -72,7 +71,11 @@ public class JoinSuccessTest {
                 .andExpect(jsonPath("$.data.name").value("이름"))
                 .andExpect(jsonPath("$.data.nickname").value("닉네임"))
                 .andExpect(header().string("Location", containsString("api/v1/members/")))
-                .andDo(doc(JOIN_SUCCESS_BASE, MEMBER_JOIN_REQUEST_FIELDS, successResponseWithDataFields()));
+                .andDo(
+                        doc(
+                                JOIN_SUCCESS_BASE,
+                                MEMBER_JOIN_REQUEST_FIELDS,
+                                successResponseWithDataFields()));
     }
 
     @Test
@@ -83,8 +86,7 @@ public class JoinSuccessTest {
         memberService.deleteMember(memberService.joinMember(request).getData().getId());
 
         // when & then
-        mockMvc.perform(post(ApiPath.MEMBER_JOIN)
-                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(post(ApiPath.MEMBER_JOIN).content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.message").value(JOIN_SUCCESS))
@@ -94,6 +96,10 @@ public class JoinSuccessTest {
                 .andExpect(jsonPath("$.data.name").value("이름"))
                 .andExpect(jsonPath("$.data.nickname").value("닉네임"))
                 .andExpect(header().string("Location", containsString("api/v1/members/")))
-                .andDo(doc(JOIN_SUCCESS_CASE + "/deleted", MEMBER_JOIN_REQUEST_FIELDS, successResponseWithDataFields()));
+                .andDo(
+                        doc(
+                                JOIN_SUCCESS_CASE + "/deleted",
+                                MEMBER_JOIN_REQUEST_FIELDS,
+                                successResponseWithDataFields()));
     }
 }

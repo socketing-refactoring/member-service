@@ -1,7 +1,6 @@
 package com.jeein.member.repository;
 
 import com.jeein.member.entity.Member;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +31,6 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     Optional<Member> findMemberWithDetailsByEmail(@Param("email") String email);
 
     @Modifying(clearAutomatically = true)
-    @Query(
-            "UPDATE Member m SET m.deletedAt = :now WHERE m.id = :id AND m.deletedAt IS NULL")
+    @Query("UPDATE Member m SET m.deletedAt = :now WHERE m.id = :id AND m.deletedAt IS NULL")
     void softDelete(@Param("id") UUID id, @Param("now") Instant now);
 }

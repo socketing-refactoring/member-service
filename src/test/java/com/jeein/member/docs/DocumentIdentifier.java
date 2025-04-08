@@ -19,7 +19,6 @@ public class DocumentIdentifier {
     public static final String LOGIN = "login";
     public static final String LOGIN_SUCCESS = LOGIN + "/success";
     public static final String LOGIN_SUCCESS_BASE = LOGIN_SUCCESS + "/base";
-    public static final String LOGIN_SUCCESS_CASE = LOGIN_SUCCESS + "/cases";
 
     public static final String LOGIN_VALIDATION = LOGIN + "/validation";
     public static final String LOGIN_VALIDATION_EMAIL = LOGIN_VALIDATION + "/email";

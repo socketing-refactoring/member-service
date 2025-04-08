@@ -31,15 +31,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MemberException.class)
     protected ResponseEntity<CommonResponseDTO<Object>> handleMemberException(MemberException e) {
-        CommonResponseDTO<Object> response =
-                CommonResponseDTO.error(e.getErrorCode());
+        CommonResponseDTO<Object> response = CommonResponseDTO.error(e.getErrorCode());
         return new ResponseEntity<>(response, e.getErrorCode().getStatus());
     }
 
     @ExceptionHandler(AuthException.class)
     protected ResponseEntity<CommonResponseDTO<Object>> handleAuthException(AuthException e) {
-        CommonResponseDTO<Object> response =
-                CommonResponseDTO.error(e.getErrorCode());
+        CommonResponseDTO<Object> response = CommonResponseDTO.error(e.getErrorCode());
         return new ResponseEntity<>(response, e.getErrorCode().getStatus());
     }
 

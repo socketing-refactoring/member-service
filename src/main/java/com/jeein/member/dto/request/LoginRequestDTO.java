@@ -19,9 +19,6 @@ public class LoginRequestDTO {
     private String password;
 
     public static LoginRequestDTO of(String email, String password) {
-        return LoginRequestDTO.builder()
-                .email(email)
-                .password(password)
-                .build();
+        return LoginRequestDTO.builder().email(email).password(password).build();
     }
 }

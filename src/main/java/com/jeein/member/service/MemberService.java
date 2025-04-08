@@ -1,5 +1,8 @@
 package com.jeein.member.service;
 
+import static com.jeein.member.ResponseMessage.JOIN_SUCCESS;
+import static com.jeein.member.ResponseMessage.LOGIN_SUCCESS;
+
 import com.jeein.member.dto.common.CommonResponseDTO;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.dto.request.LoginRequestDTO;
@@ -15,7 +18,6 @@ import com.jeein.member.exception.AuthException;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.exception.MemberException;
 import com.jeein.member.repository.MemberRepository;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.jeein.member.ResponseMessage.JOIN_SUCCESS;
-import static com.jeein.member.ResponseMessage.LOGIN_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -97,8 +96,7 @@ public class MemberService {
         }
 
         log.debug("login member: {}", member);
-        return CommonResponseDTO.success(
-                LOGIN_SUCCESS, "0", LoginResponseDTO.fromEntity(member));
+        return CommonResponseDTO.success(LOGIN_SUCCESS, "0", LoginResponseDTO.fromEntity(member));
     }
 
     // 모든 회원 조회
@@ -153,7 +151,8 @@ public class MemberService {
 
     // 비밀번호 업데이트
     @Transactional
-    public CommonResponseDTO<Void> updatePassword(String id, UpdatePasswordRequestDTO updatePasswordRequest) {
+    public CommonResponseDTO<Void> updatePassword(
+            String id, UpdatePasswordRequestDTO updatePasswordRequest) {
         // 회원 조회
         Member member =
                 memberRepository

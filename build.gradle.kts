@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.diffplug.spotless") version "7.0.2"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("org.asciidoctor.jvm.convert") version "4.0.4"
 }
 
 group = "com.jeein"
@@ -106,9 +106,12 @@ tasks.jar {
 tasks.test {
     useJUnitPlatform()
     doFirst {
-        val agentJar = configurations.testRuntimeClasspath.get().files
-            .find { it.name.contains("byte-buddy-agent") }
-            ?: throw GradleException("Byte Buddy Agent JAR not found")
+        val agentJar =
+            configurations.testRuntimeClasspath
+                .get()
+                .files
+                .find { it.name.contains("byte-buddy-agent") }
+                ?: throw GradleException("Byte Buddy Agent JAR not found")
 
         jvmArgs("-javaagent:${agentJar.absolutePath}")
     }
@@ -116,13 +119,14 @@ tasks.test {
     outputs.dir(snippetsDir)
 }
 
-val asciidoctorTask = tasks.named<AsciidoctorTask>("asciidoctor").apply {
-    configure {
-        inputs.dir(snippetsDir)
-        configurations("asciidoctorExt")
-        dependsOn(tasks.test)
+val asciidoctorTask =
+    tasks.named<AsciidoctorTask>("asciidoctor").apply {
+        configure {
+            inputs.dir(snippetsDir)
+            configurations("asciidoctorExt")
+            dependsOn(tasks.test)
+        }
     }
-}
 
 tasks.named<BootJar>("bootJar") {
     archiveFileName.set("member-service.jar")
