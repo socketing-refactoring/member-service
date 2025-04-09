@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Builder
-@NoArgsConstructor
+// @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class JoinRequestDTO {

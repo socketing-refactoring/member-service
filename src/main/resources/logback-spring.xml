@@ -65,7 +65,7 @@
     </springProfile>
 
     <!-- local 프로파일 로깅 설정 -->
-    <springProfile name="local">
+    <springProfile name="test">
         <logger name="org.hibernate.SQL" level="TRACE" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
@@ -84,6 +84,17 @@
 
         <logger name="com.jeein.member" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE" />
+        </logger>
+
+        <logger name="ROOT" level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+    <!-- local 프로파일 로깅 설정 -->
+    <springProfile name="test">
+        <logger name="org.hibernate.SQL" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE"/>
         </logger>
 
         <logger name="ROOT" level="INFO">

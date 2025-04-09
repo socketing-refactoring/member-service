@@ -16,6 +16,7 @@ import com.jeein.member.docs.ApiPath;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.dto.request.LoginRequestDTO;
 import com.jeein.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,15 +26,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
+@Slf4j
 @Transactional
+@ActiveProfiles("test")
+@SpringBootTest
 @ExtendWith(RestDocumentationExtension.class)
-@DisplayName("로그인 실패 예외 테스트")
+@DisplayName("로그인 성공 테스트")
 public class LoginSuccessTest {
 
     @Autowired private WebApplicationContext context;
@@ -65,6 +69,7 @@ public class LoginSuccessTest {
     @DisplayName("로그인 요청이 유효하고 회원가입 정보와 일치하면 로그인에 성공한다.")
     void login_withInvalidEmail_shouldReturnForbidden() throws Exception {
         LoginRequestDTO loginRequest = LoginRequestDTO.of("email@example.com", "password");
+        log.debug(loginRequest.toString());
 
         mockMvc.perform(
                         post(ApiPath.MEMBER_LOGIN)

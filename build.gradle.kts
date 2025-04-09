@@ -2,11 +2,14 @@ import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    java
     id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.diffplug.spotless") version "7.0.2"
     id("org.asciidoctor.jvm.convert") version "4.0.4"
+    id("org.ajoberstar.git-publish") version "4.2.0"
+    id("org.ec4j.editorconfig") version "0.0.3"
+    id("java")
+    id("checkstyle")
 }
 
 group = "com.jeein"
@@ -33,19 +36,19 @@ spotless {
         endWithNewline()
     }
 
-    val prettierConfig by extra("$rootDir/.prettierrc.yml")
-
-    format("markdown") {
-        target("**/*.md", "*.md")
-
-        prettier().configFile(prettierConfig)
-    }
-
-    format("yaml") {
-        target("*.yml", "src/main/resources/*.yml")
-
-        prettier().configFile(prettierConfig)
-    }
+//    val prettierConfig by extra("$rootDir/.prettierrc.yml")
+//
+//    format("markdown") {
+//        target("**/*.md", "*.md")
+//
+//        prettier().configFile(prettierConfig)
+//    }
+//
+//    format("yaml") {
+//        target("*.yml", "src/main/resources/*.yml")
+//
+//        prettier().configFile(prettierConfig)
+//    }
 }
 
 repositories {
@@ -87,20 +90,44 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok")
 }
 
-tasks.register("lintCheck") {
+ tasks.register("javaFormattingCheck") {
     dependsOn("spotlessCheck")
 
     doLast {
         println("\u001B[32m✔ spotlessCheck check completed successfully!\u001B[0m")
     }
-}
+ }
 
-tasks.register("lintApply") {
+ tasks.register("javaFormattingApply") {
     dependsOn("spotlessApply")
 
     doLast {
         println("\u001B[32m✔ spotlessApply completed successfully!\u001B[0m")
     }
+ }
+
+checkstyle {
+    toolVersion = "10.21.1"
+    configFile = file("$rootDir/checkstyle.xml")
+}
+
+tasks.withType<Checkstyle>().configureEach {
+    source = fileTree("src/main/java")
+    include("**/*.java")
+    reports {
+        html.required.set(true)
+        xml.required.set(false)
+    }
+}
+
+tasks.named("check") {
+    dependsOn("checkstyleMain")
+}
+
+tasks.named("checkstyleMain") {
+    group = "verification"
+    description = "Run Checkstyle"
+    dependsOn("checkstyle")
 }
 
 tasks.jar {
@@ -121,6 +148,50 @@ tasks.test {
     }
 
     outputs.dir(snippetsDir)
+
+    val testDurations = mutableMapOf<String, Long>()
+
+    val listener =
+        object : TestListener {
+            private var startTime = 0L
+
+            override fun beforeTest(descriptor: TestDescriptor) {
+                startTime = System.currentTimeMillis()
+            }
+
+            override fun afterTest(
+                descriptor: TestDescriptor,
+                result: TestResult,
+            ) {
+                val duration = System.currentTimeMillis() - startTime
+                val className = descriptor.className ?: "UnknownClass"
+                testDurations[className] = testDurations.getOrDefault(className, 0L) + duration
+            }
+
+            override fun beforeSuite(suite: TestDescriptor) {}
+
+            override fun afterSuite(
+                suite: TestDescriptor,
+                result: TestResult,
+            ) {
+                if (suite.parent == null) {
+                    val reportFile =
+                        layout.buildDirectory
+                            .file("reports/tests/test/class-durations.txt")
+                            .get()
+                            .asFile
+                    val content =
+                        testDurations.entries.joinToString("\n") {
+                            val seconds = "%.3f".format(it.value / 1000.0)
+                            "✅ ${it.key} - ${seconds}s"
+                        }
+                    reportFile.writeText(content)
+                    println("\u001B[36m✔ Test durations written to class-durations.txt\u001B[0m")
+                }
+            }
+        }
+
+    addTestListener(listener)
 }
 
 val asciidoctorTask =
@@ -131,6 +202,16 @@ val asciidoctorTask =
             dependsOn(tasks.test)
         }
     }
+
+// gitPublish {
+//    repoUri = 'git@github.com:socketing-refactoring/socketing-refactoring-log.git'
+//    branch = 'gh-pages'
+//    contents {
+//        from(asciidoctor.outputDir) {
+//            into '.'
+//        }
+//    }
+// }
 
 tasks.named<BootJar>("bootJar") {
     archiveFileName.set("member-service.jar")
