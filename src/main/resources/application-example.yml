@@ -3,9 +3,8 @@ spring:
     name: member-service
   profiles:
     active: dev
-
   config:
-    import: ${SPRING_CLOUD_CONFIG_URI}
+    import: "${SPRING_CLOUD_CONFIG_URI}"
   cloud:
     config:
       name: member-service

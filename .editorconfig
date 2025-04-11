@@ -1,0 +1,39 @@
+root = true
+
+[*]
+charset = utf-8
+
+# [newline-lf]
+end_of_line = lf
+
+# [no-trailing-spaces]
+trim_trailing_whitespace = true
+
+# [newline-eof]
+insert_final_newline = true
+
+[*.bat]
+end_of_line = crlf
+
+[*.java]
+# [indentation-tab]
+indent_style = tab
+
+# [4-spaces-tab]
+indent_size = 4
+
+[*.kts]
+indent_size = 4
+
+[*.{yaml,yml}]
+indent_size = 2
+
+[*.xml]
+indent_size = 2
+
+[*.adoc]
+indent_style = space
+indent_size = 4
+
+[*.md]
+indent_size = 2

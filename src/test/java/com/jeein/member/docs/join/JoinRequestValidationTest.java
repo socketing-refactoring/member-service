@@ -73,7 +73,7 @@ public class JoinRequestValidationTest {
         }
     }
 
-    private static Map<String, String> CreateInvalidMapWithField(
+    private static Map<String, String> createInvalidMapWithField(
             Map<String, String> base, String field, String value) {
         Map<String, String> copy = new HashMap<>(base);
         copy.put(field, value);
@@ -99,22 +99,22 @@ public class JoinRequestValidationTest {
         return Stream.of(
                 Arguments.of(
                         "이메일 패턴 유효하지 않음",
-                        CreateInvalidMapWithField(base, "email", "invalid-email"),
+                        createInvalidMapWithField(base, "email", "invalid-email"),
                         "email",
                         JOIN_VALIDATION_EMAIL + "/pattern"),
                 Arguments.of(
                         "이메일 빈 문자열",
-                        CreateInvalidMapWithField(base, "email", ""),
+                        createInvalidMapWithField(base, "email", ""),
                         "email",
                         JOIN_VALIDATION_EMAIL + "/blank"),
                 Arguments.of(
                         "이메일 null",
-                        CreateInvalidMapWithField(base, "email", null),
+                        createInvalidMapWithField(base, "email", null),
                         "email",
                         JOIN_VALIDATION_EMAIL + "/null"),
                 Arguments.of(
                         "이메일 50자 초과",
-                        CreateInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"),
+                        createInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"),
                         "email",
                         JOIN_VALIDATION_EMAIL + "/size"));
     }
@@ -123,17 +123,17 @@ public class JoinRequestValidationTest {
         return Stream.of(
                 Arguments.of(
                         "이름 빈 문자열",
-                        CreateInvalidMapWithField(base, "name", ""),
+                        createInvalidMapWithField(base, "name", ""),
                         "name",
                         JOIN_VALIDATION_NAME + "/blank"),
                 Arguments.of(
                         "이름 null",
-                        CreateInvalidMapWithField(base, "name", null),
+                        createInvalidMapWithField(base, "name", null),
                         "name",
                         JOIN_VALIDATION_NAME + "/null"),
                 Arguments.of(
                         "이름 20자 초과",
-                        CreateInvalidMapWithField(base, "name", "a".repeat(21)),
+                        createInvalidMapWithField(base, "name", "a".repeat(21)),
                         "name",
                         JOIN_VALIDATION_NAME + "/size"));
     }
@@ -142,17 +142,17 @@ public class JoinRequestValidationTest {
         return Stream.of(
                 Arguments.of(
                         "닉네임 빈 문자열",
-                        CreateInvalidMapWithField(base, "nickname", ""),
+                        createInvalidMapWithField(base, "nickname", ""),
                         "nickname",
                         JOIN_VALIDATION_NICKNAME + "/blank"),
                 Arguments.of(
                         "닉네임 null",
-                        CreateInvalidMapWithField(base, "nickname", null),
+                        createInvalidMapWithField(base, "nickname", null),
                         "nickname",
                         JOIN_VALIDATION_NICKNAME + "/null"),
                 Arguments.of(
                         "닉네임 20자 초과",
-                        CreateInvalidMapWithField(base, "nickname", "a".repeat(21)),
+                        createInvalidMapWithField(base, "nickname", "a".repeat(21)),
                         "nickname",
                         JOIN_VALIDATION_NICKNAME + "/size"));
     }
@@ -161,17 +161,17 @@ public class JoinRequestValidationTest {
         return Stream.of(
                 Arguments.of(
                         "비밀번호 빈 문자열",
-                        CreateInvalidMapWithField(base, "password", ""),
+                        createInvalidMapWithField(base, "password", ""),
                         "password",
                         JOIN_VALIDATION_PASSWORD + "/blank"),
                 Arguments.of(
                         "비밀번호 null",
-                        CreateInvalidMapWithField(base, "password", null),
+                        createInvalidMapWithField(base, "password", null),
                         "password",
                         JOIN_VALIDATION_PASSWORD + "/null"),
                 Arguments.of(
                         "비밀번호 20자 초과",
-                        CreateInvalidMapWithField(base, "password", "a".repeat(21)),
+                        createInvalidMapWithField(base, "password", "a".repeat(21)),
                         "password",
                         JOIN_VALIDATION_PASSWORD + "/size"));
     }

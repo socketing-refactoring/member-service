@@ -2,18 +2,14 @@ repos:
   - repo: local
     hooks:
       - id: spotless-apply
-        name: Apply spotless (java code formatter)
-        entry: bash -c ./gradlew javaFormattingApply
+        name: Apply spotless formatting plugin
+        entry: bash -c ./gradlew formattingApply
         language: system
         pass_filenames: false
-
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+  - repo: local
     hooks:
-      - id: trailing-whitespace
-        args: [ --markdown-linebreak-ext=md ]
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-merge-conflict
-      - id: check-json
-      - id: check-xml
+      - id: checkstyle-apply
+        name: Check Java style
+        entry: bash -c './gradlew checkstyleMain checkstyleTest'
+        language: system
+        pass_filenames: false

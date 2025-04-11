@@ -1,6 +1,5 @@
 server:
   port: 8081
-
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -10,7 +9,6 @@ spring:
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
-
   jpa:
     database: postgresql
     show-sql: true
@@ -20,19 +18,16 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-
 eureka:
   client:
     enabled: false
-
 logging:
   config: classpath:logback-spring.xml
-
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: '*'
   endpoint:
     prometheus:
       enabled: true
@@ -52,8 +47,7 @@ management:
       enabled: true
     info:
       enabled: true
-    show-details: "always"
-
+    show-details: always
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
