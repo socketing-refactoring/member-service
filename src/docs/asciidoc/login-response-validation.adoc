@@ -1,0 +1,35 @@
+===== 이메일 유효성 오류
+
+로그인 시 이메일이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/login/validation/email/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/login/validation/email/null/response-body.adoc[opts=optional]
+
+* pattern
+
+include::{snippets}/login/validation/email/pattern/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/login/validation/email/size/response-body.adoc[opts=optional]
+
+===== 비밀번호 유효성 오류
+
+로그인 시 비밀번호가 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/login/validation/password/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/login/validation/password/null/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/login/validation/password/size/response-body.adoc[opts=optional]

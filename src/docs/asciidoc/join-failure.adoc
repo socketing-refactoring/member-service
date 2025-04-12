@@ -1,9 +1,0 @@
-= 회원가입 실패 문서
-
-회원가입 실패 시 발생할 수 있는 오류들을 분류하여 설명합니다.
-
-== 유효성 검사 실패
-* link:join-failure-validation.adoc[회원가입 유효성 오류 문서]
-
-== 중복 오류
-* link:join-failure-duplication.adoc[회원가입 중복 오류 문서]

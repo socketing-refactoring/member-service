@@ -1,0 +1,11 @@
+HTTP Request
+include::{snippets}/login/success/base/http-request.adoc[opts=optional]
+
+Request Header
+include::{snippets}/login/success/base/request-headers.adoc[opts=optional]
+
+Request Body
+include::{snippets}/login/success/base/request-body.adoc[opts=optional]
+
+Request Field
+include::{snippets}/login/success/base/request-fields.adoc[opts=optional]

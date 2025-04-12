@@ -1,0 +1,11 @@
+Http Response
+include::{snippets}/login/success/base/http-response.adoc[opts=optional]
+
+Response Header
+include::{snippets}/login/success/base/response-headers.adoc[opts=optional]
+
+Response Body
+include::{snippets}/login/success/base/response-body.adoc[opts=optional]
+
+Response Fields
+include::{snippets}/login/success/base/response-fields.adoc[opts=optional]

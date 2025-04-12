@@ -1,5 +1,0 @@
-= 회원가입 성공 문서
-
-회원가입 성공 시의 응답 예시입니다.
-
-operation::join/success/base[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']

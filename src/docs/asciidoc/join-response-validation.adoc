@@ -1,0 +1,67 @@
+===== 이메일 유효성 오류
+
+회원가입 시 이메일이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/join/validation/email/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/join/validation/email/null/response-body.adoc[opts=optional]
+
+* pattern
+
+include::{snippets}/join/validation/email/pattern/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/join/validation/email/size/response-body.adoc[opts=optional]
+
+===== 이름 유효성 오류
+
+회원가입 시 이름이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/join/validation/name/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/join/validation/name/null/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/join/validation/name/size/response-body.adoc[opts=optional]
+
+===== 닉네임 유효성 오류
+
+회원가입 시 닉네임이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/join/validation/nickname/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/join/validation/nickname/null/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/join/validation/nickname/size/response-body.adoc[opts=optional]
+
+===== 비밀번호 유효성 오류
+
+회원가입 시 비밀번호가 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+* blank
+
+include::{snippets}/join/validation/password/blank/response-body.adoc[opts=optional]
+
+* null
+
+include::{snippets}/join/validation/password/null/response-body.adoc[opts=optional]
+
+* size
+
+include::{snippets}/join/validation/password/size/response-body.adoc[opts=optional]

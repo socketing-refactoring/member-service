@@ -1,0 +1,11 @@
+HTTP Response
+include::{snippets}/join/success/base/http-response.adoc[opts=optional]
+
+Response Headers
+include::{snippets}/join/success/base/response-headers.adoc[opts=optional]
+
+Response Body
+include::{snippets}/join/success/base/response-body.adoc[opts=optional]
+
+Response Fields
+include::{snippets}/join/success/base/response-fields.adoc[opts=optional]

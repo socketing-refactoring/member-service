@@ -163,21 +163,25 @@ tasks.test {
 val asciidoctorTask =
     tasks.named<AsciidoctorTask>("asciidoctor").apply {
         configure {
+
             inputs.dir(snippetsDir)
             configurations("asciidoctorExt")
             dependsOn(tasks.test)
 
             sources(
                 delegateClosureOf<PatternSet> {
-                    include("**/*.adoc")
+                    include("index.adoc")
                 },
             )
 
-            outputs.dir(layout.buildDirectory.dir("docs/asciidoc/member-service"))
+            setOutputDir(layout.buildDirectory.dir("docs/asciidoc/member-service"))
 
             attributes(
                 mapOf(
+                    "snippets" to file("build/generated-snippets"),
                     "outfilesuffix" to ".html",
+                    "relfileprefix" to "",
+                    "xrefstyle" to "short",
                 ),
             )
         }
@@ -200,7 +204,7 @@ tasks.named<Jar>("jar") {
 val asciidoctorOutputDir = layout.buildDirectory.dir("docs/asciidoc/member-service")
 
 // Publishing Document
-tasks.named("gitPublishCommit") {
+tasks.named("gitPublishCopy") {
     dependsOn("asciidoctor")
 }
 

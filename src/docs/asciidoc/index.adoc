@@ -1,11 +1,61 @@
 = API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
 
 == 회원가입
 
-* link:join-success.adoc[회원가입 성공 문서]
-* link:join-failure.adoc[회원가입 실패 문서]
+=== HTTP 요청
+
+회원가입 요청에 대한 설명입니다.
+
+include::join-request.adoc[]
+
+=== HTTP 성공 응답
+
+회원가입 성공 시 반환되는 응답입니다.
+
+include::join-response.adoc[]
+
+=== HTTP 실패 응답
+
+회원가입 실패 시 발생할 수 있는 오류들을 분류하여 설명합니다.
+
+==== 유효성 오류
+
+회원가입 요청 데이터의 유효성 검사 실패 응답입니다.
+
+include::join-response-validation.adoc[]
+
+==== 중복 오류
+
+회원가입 요청 데이터의 중복 예외로 인한 실패 응답입니다.
+
+include::join-response-duplication.adoc[]
 
 == 로그인
 
-* link:login-success.adoc[로그인 성공 문서]
-* link:login-failure.adoc[로그인 실패 문서]
+=== HTTP 요청
+
+로그인 요청에 대한 설명입니다.
+
+include::login-request.adoc[]
+
+=== HTTP 성공 응답
+
+로그인 성공 시 반환되는 응답입니다.
+
+include::login-response.adoc[]
+
+=== HTTP 실패 응답
+
+로그인 실패 시 발생할 수 있는 오류들을 분류하여 설명합니다.
+
+==== 유효성 오류
+
+로그인 요청 데이터의 유효성 검사 실패 응답입니다.
+
+include::login-response-validation.adoc[]
