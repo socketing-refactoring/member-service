@@ -1,0 +1,41 @@
+= 로그인 실패 문서 (유효성)
+
+로그인 시 발생할 수 있는 오류와 그에 대한 응답을 설명합니다.
+
+== 유효성 오류
+
+=== 이메일 유효성 오류
+
+로그인 시 이메일이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::login/validation/email/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::login/validation/email/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== pattern
+
+operation::login/validation/email/pattern[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::login/validation/email/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+=== 비밀번호 유효성 오류
+
+로그인 시 비밀번호가 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::login/validation/password/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::login/validation/password/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::login/validation/password/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']

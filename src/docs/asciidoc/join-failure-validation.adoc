@@ -1,0 +1,74 @@
+= 회원가입 실패 문서 (유효성)
+
+회원가입 시 발생할 수 있는 오류와 그에 대한 응답을 설명합니다.
+
+== 유효성 오류
+
+=== 이메일 유효성 오류
+
+회원가입 시 이메일이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::join/validation/email/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::join/validation/email/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== pattern
+
+operation::join/validation/email/pattern[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::join/validation/email/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+=== 이름 유효성 오류
+
+회원가입 시 이름이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::join/validation/name/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::join/validation/name/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::join/validation/name/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+=== 닉네임 유효성 오류
+
+회원가입 시 닉네임이 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::join/validation/nickname/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::join/validation/nickname/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::join/validation/nickname/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+
+=== 비밀번호 유효성 오류
+
+회원가입 시 비밀번호가 유효성 검사에 실패하는 경우 발생하는 오류입니다.
+
+==== blank
+
+operation::join/validation/password/blank[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== null
+
+operation::join/validation/password/null[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']
+
+==== size
+
+operation::join/validation/password/size[snippets='http-request,request-headers,request-body,request-fields,http-response,response-headers,response-body,response-fields']

@@ -70,7 +70,7 @@ public class MemberController {
         CommonResponseDTO<JoinResponseDTO> response = memberService.joinMember(joinRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .location(URI.create("api/v1/members/" + response.getData().getId()))
+                .location(URI.create("/api/v1/members/" + response.getData().getId()))
                 .body(response);
     }
 

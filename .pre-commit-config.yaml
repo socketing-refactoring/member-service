@@ -1,15 +1,15 @@
 repos:
   - repo: local
     hooks:
-      - id: spotless-apply
-        name: Apply spotless formatting plugin
-        entry: bash -c ./gradlew formattingApply
+      - id: formatting-test-docs
+        name: Execute Gradle Check, Test, AsciidocTask
+        entry: bash -c ./gradlew check --info
         language: system
         pass_filenames: false
   - repo: local
     hooks:
-      - id: checkstyle-apply
-        name: Check Java style
-        entry: bash -c './gradlew checkstyleMain checkstyleTest'
+      - id: publish-docs
+        name: Execute Gradle GitPublish
         language: system
+        entry: bash -c ./gradlew gitPublishPush
         pass_filenames: false

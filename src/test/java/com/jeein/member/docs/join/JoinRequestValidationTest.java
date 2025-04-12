@@ -1,9 +1,6 @@
 package com.jeein.member.docs.join;
 
-import static com.jeein.member.docs.DocumentIdentifier.*;
 import static com.jeein.member.docs.RestDocsUtil.doc;
-import static com.jeein.member.docs.snippets.CommonSnippet.errorResponseFields;
-import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -14,6 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
+import com.jeein.member.docs.DocumentIdentifier;
+import com.jeein.member.docs.snippets.CommonSnippet;
+import com.jeein.member.docs.snippets.MemberSnippet;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.service.MemberService;
@@ -101,22 +101,22 @@ public class JoinRequestValidationTest {
                         "이메일 패턴 유효하지 않음",
                         createInvalidMapWithField(base, "email", "invalid-email"),
                         "email",
-                        JOIN_VALIDATION_EMAIL + "/pattern"),
+                        DocumentIdentifier.JOIN_VALIDATION_EMAIL + "/pattern"),
                 Arguments.of(
                         "이메일 빈 문자열",
                         createInvalidMapWithField(base, "email", ""),
                         "email",
-                        JOIN_VALIDATION_EMAIL + "/blank"),
+                        DocumentIdentifier.JOIN_VALIDATION_EMAIL + "/blank"),
                 Arguments.of(
                         "이메일 null",
                         createInvalidMapWithField(base, "email", null),
                         "email",
-                        JOIN_VALIDATION_EMAIL + "/null"),
+                        DocumentIdentifier.JOIN_VALIDATION_EMAIL + "/null"),
                 Arguments.of(
                         "이메일 50자 초과",
                         createInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"),
                         "email",
-                        JOIN_VALIDATION_EMAIL + "/size"));
+                        DocumentIdentifier.JOIN_VALIDATION_EMAIL + "/size"));
     }
 
     private static Stream<Arguments> nameValidationCases(Map<String, String> base) {
@@ -125,17 +125,17 @@ public class JoinRequestValidationTest {
                         "이름 빈 문자열",
                         createInvalidMapWithField(base, "name", ""),
                         "name",
-                        JOIN_VALIDATION_NAME + "/blank"),
+                        DocumentIdentifier.JOIN_VALIDATION_NAME + "/blank"),
                 Arguments.of(
                         "이름 null",
                         createInvalidMapWithField(base, "name", null),
                         "name",
-                        JOIN_VALIDATION_NAME + "/null"),
+                        DocumentIdentifier.JOIN_VALIDATION_NAME + "/null"),
                 Arguments.of(
                         "이름 20자 초과",
                         createInvalidMapWithField(base, "name", "a".repeat(21)),
                         "name",
-                        JOIN_VALIDATION_NAME + "/size"));
+                        DocumentIdentifier.JOIN_VALIDATION_NAME + "/size"));
     }
 
     private static Stream<Arguments> nicknameValidationCases(Map<String, String> base) {
@@ -144,17 +144,17 @@ public class JoinRequestValidationTest {
                         "닉네임 빈 문자열",
                         createInvalidMapWithField(base, "nickname", ""),
                         "nickname",
-                        JOIN_VALIDATION_NICKNAME + "/blank"),
+                        DocumentIdentifier.JOIN_VALIDATION_NICKNAME + "/blank"),
                 Arguments.of(
                         "닉네임 null",
                         createInvalidMapWithField(base, "nickname", null),
                         "nickname",
-                        JOIN_VALIDATION_NICKNAME + "/null"),
+                        DocumentIdentifier.JOIN_VALIDATION_NICKNAME + "/null"),
                 Arguments.of(
                         "닉네임 20자 초과",
                         createInvalidMapWithField(base, "nickname", "a".repeat(21)),
                         "nickname",
-                        JOIN_VALIDATION_NICKNAME + "/size"));
+                        DocumentIdentifier.JOIN_VALIDATION_NICKNAME + "/size"));
     }
 
     private static Stream<Arguments> passwordValidationCases(Map<String, String> base) {
@@ -163,17 +163,17 @@ public class JoinRequestValidationTest {
                         "비밀번호 빈 문자열",
                         createInvalidMapWithField(base, "password", ""),
                         "password",
-                        JOIN_VALIDATION_PASSWORD + "/blank"),
+                        DocumentIdentifier.JOIN_VALIDATION_PASSWORD + "/blank"),
                 Arguments.of(
                         "비밀번호 null",
                         createInvalidMapWithField(base, "password", null),
                         "password",
-                        JOIN_VALIDATION_PASSWORD + "/null"),
+                        DocumentIdentifier.JOIN_VALIDATION_PASSWORD + "/null"),
                 Arguments.of(
                         "비밀번호 20자 초과",
                         createInvalidMapWithField(base, "password", "a".repeat(21)),
                         "password",
-                        JOIN_VALIDATION_PASSWORD + "/size"));
+                        DocumentIdentifier.JOIN_VALIDATION_PASSWORD + "/size"));
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
@@ -183,7 +183,7 @@ public class JoinRequestValidationTest {
             String testName,
             Map<String, String> requestMap,
             String expectedField,
-            String docDirectory)
+            String docIdentifier)
             throws Exception {
         String requestJson = objectMapper.writeValueAsString(requestMap);
 
@@ -197,6 +197,10 @@ public class JoinRequestValidationTest {
                                                 ErrorCode.INVALID_REQUEST_VALUE.getMessage())))
                 .andExpect(jsonPath("$.errors[0].field").value(expectedField))
                 .andExpect(jsonPath("$.data").doesNotExist())
-                .andDo(doc(docDirectory, MEMBER_JOIN_REQUEST_FIELDS, errorResponseFields()));
+                .andDo(
+                        doc(
+                                docIdentifier,
+                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
+                                CommonSnippet.errorResponseFields()));
     }
 }

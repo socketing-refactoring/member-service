@@ -112,15 +112,23 @@ spotless {
 }
 
 // CheckStyle Task Configuration
-tasks.named("check") {
-    dependsOn("editorconfigCheck", "checkstyleMain", "checkstyleTest")
-}
-
 tasks.withType<Checkstyle>().configureEach {
     reports {
         xml.required = false
         html.required = true
     }
+}
+
+tasks.named("checkstyleMain") {
+    dependsOn("spotlessApply")
+}
+
+tasks.named("checkstyleTest") {
+    dependsOn("spotlessApply")
+}
+
+tasks.named("spotlessApply") {
+    dependsOn("editorconfigFormat")
 }
 
 checkstyle {
@@ -136,8 +144,9 @@ val snippetsDir by extra { file("build/generated-snippets") }
 
 tasks.test {
     useJUnitPlatform()
-    jvmArgs = listOf("-Xshare:off")
 
+    // Remove JVM warning message
+    jvmArgs = listOf("-Xshare:off")
     doFirst {
         val agentJar =
             configurations.testRuntimeClasspath
@@ -158,28 +167,52 @@ val asciidoctorTask =
             inputs.dir(snippetsDir)
             configurations("asciidoctorExt")
             dependsOn(tasks.test)
+
+            sources(
+                delegateClosureOf<PatternSet> {
+                    include("**/*.adoc")
+                },
+            )
+
+            outputs.dir(layout.buildDirectory.dir("docs/asciidoc/member-service"))
+
+            attributes(
+                mapOf(
+                    "outfilesuffix" to ".html"
+                )
+            )
+
+
         }
     }
 
-// gitPublish {
-//    repoUri = 'git@github.com:socketing-refactoring/socketing-refactoring-log.git'
-//    branch = 'gh-pages'
-//    contents {
-//        from(asciidoctor.outputDir) {
-//            into '.'
-//        }
-//    }
-// }
-
-tasks.jar {
-    enabled = false
-}
-
+// Packaging Jar
 tasks.named<BootJar>("bootJar") {
     archiveFileName.set("member-service.jar")
     dependsOn(asciidoctorTask)
 
-    from(asciidoctorTask.map { it.outputDir.resolve("html5") }) {
+    from(asciidoctorTask.map { it.outputDir.resolve("member-service") }) {
         into("static/docs")
     }
+}
+
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
+val asciidoctorOutputDir = layout.buildDirectory.dir("docs/asciidoc/member-service")
+
+gitPublish {
+    repoUri.set("git@github.com:socketing-refactoring/socketing-refactoring.github.io.git")
+    branch.set("gh-pages")
+    contents {
+        from(asciidoctorOutputDir) {
+            into("docs/member-service")
+        }
+
+        preserve {
+            include("**")
+        }
+    }
+    commitMessage.set("Update Member Service API documentation")
 }

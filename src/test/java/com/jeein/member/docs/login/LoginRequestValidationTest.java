@@ -1,6 +1,5 @@
 package com.jeein.member.docs.login;
 
-import static com.jeein.member.docs.DocumentIdentifier.*;
 import static com.jeein.member.docs.RestDocsUtil.doc;
 import static com.jeein.member.docs.snippets.CommonSnippet.errorResponseFields;
 import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_LOGIN_REQUEST_FIELDS;
@@ -14,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
+import com.jeein.member.docs.DocumentIdentifier;
 import com.jeein.member.dto.request.LoginRequestDTO;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.service.MemberService;
@@ -73,7 +73,7 @@ public class LoginRequestValidationTest {
         }
     }
 
-    private static Map<String, String> CreateInvalidMapWithField(
+    private static Map<String, String> createInvalidMapWithField(
             Map<String, String> base, String field, String value) {
         Map<String, String> copy = new HashMap<>(base);
         copy.put(field, value);
@@ -94,43 +94,43 @@ public class LoginRequestValidationTest {
         return Stream.of(
                 Arguments.of(
                         "이메일 패턴 유효하지 않음",
-                        CreateInvalidMapWithField(base, "email", "invalid-email"),
+                        createInvalidMapWithField(base, "email", "invalid-email"),
                         "email",
-                        LOGIN_VALIDATION_EMAIL + "/pattern"),
+                        DocumentIdentifier.LOGIN_VALIDATION_EMAIL + "/pattern"),
                 Arguments.of(
                         "이메일 빈 문자열",
-                        CreateInvalidMapWithField(base, "email", ""),
+                        createInvalidMapWithField(base, "email", ""),
                         "email",
-                        LOGIN_VALIDATION_EMAIL + "/blank"),
+                        DocumentIdentifier.LOGIN_VALIDATION_EMAIL + "/blank"),
                 Arguments.of(
                         "이메일 null",
-                        CreateInvalidMapWithField(base, "email", null),
+                        createInvalidMapWithField(base, "email", null),
                         "email",
-                        LOGIN_VALIDATION_EMAIL + "/null"),
+                        DocumentIdentifier.LOGIN_VALIDATION_EMAIL + "/null"),
                 Arguments.of(
                         "이메일 50자 초과",
-                        CreateInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"),
+                        createInvalidMapWithField(base, "email", "a".repeat(40) + "@example.com"),
                         "email",
-                        LOGIN_VALIDATION_EMAIL + "/size"));
+                        DocumentIdentifier.LOGIN_VALIDATION_EMAIL + "/size"));
     }
 
     private static Stream<Arguments> passwordValidationCases(Map<String, String> base) {
         return Stream.of(
                 Arguments.of(
                         "비밀번호 빈 문자열",
-                        CreateInvalidMapWithField(base, "password", ""),
+                        createInvalidMapWithField(base, "password", ""),
                         "password",
-                        LOGIN_VALIDATION_PASSWORD + "/blank"),
+                        DocumentIdentifier.LOGIN_VALIDATION_PASSWORD + "/blank"),
                 Arguments.of(
                         "비밀번호 null",
-                        CreateInvalidMapWithField(base, "password", null),
+                        createInvalidMapWithField(base, "password", null),
                         "password",
-                        LOGIN_VALIDATION_PASSWORD + "/null"),
+                        DocumentIdentifier.LOGIN_VALIDATION_PASSWORD + "/null"),
                 Arguments.of(
                         "비밀번호 20자 초과",
-                        CreateInvalidMapWithField(base, "password", "a".repeat(21)),
+                        createInvalidMapWithField(base, "password", "a".repeat(21)),
                         "password",
-                        LOGIN_VALIDATION_PASSWORD + "/size"));
+                        DocumentIdentifier.LOGIN_VALIDATION_PASSWORD + "/size"));
     }
 
     @ParameterizedTest(name = "[{index}] {0}")

@@ -1,19 +1,19 @@
 package com.jeein.member.docs.join;
 
-import static com.jeein.member.ResponseMessage.JOIN_SUCCESS;
-import static com.jeein.member.docs.DocumentIdentifier.JOIN_SUCCESS_BASE;
-import static com.jeein.member.docs.DocumentIdentifier.JOIN_SUCCESS_CASE;
 import static com.jeein.member.docs.RestDocsUtil.doc;
-import static com.jeein.member.docs.snippets.CommonSnippet.successResponseWithDataFields;
-import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jeein.member.ResponseMessage;
 import com.jeein.member.docs.ApiPath;
+import com.jeein.member.docs.DocumentIdentifier;
+import com.jeein.member.docs.snippets.CommonSnippet;
+import com.jeein.member.docs.snippets.MemberSnippet;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -67,7 +68,7 @@ public class JoinSuccessTest {
         mockMvc.perform(post(ApiPath.MEMBER_JOIN).content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code").value("0"))
-                .andExpect(jsonPath("$.message").value(JOIN_SUCCESS))
+                .andExpect(jsonPath("$.message").value(ResponseMessage.JOIN_SUCCESS))
                 .andExpect(jsonPath("$.errors").doesNotExist())
                 .andExpect(jsonPath("$.data.id").exists())
                 .andExpect(jsonPath("$.data.email").value("email@example.com"))
@@ -76,9 +77,12 @@ public class JoinSuccessTest {
                 .andExpect(header().string("Location", containsString("api/v1/members/")))
                 .andDo(
                         doc(
-                                JOIN_SUCCESS_BASE,
-                                MEMBER_JOIN_REQUEST_FIELDS,
-                                successResponseWithDataFields()));
+                                DocumentIdentifier.JOIN_SUCCESS_BASE,
+                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION)
+                                                .description("생성된 리소스의 URI")),
+                                CommonSnippet.successResponseWithDataFields()));
     }
 
     @Test
@@ -92,17 +96,20 @@ public class JoinSuccessTest {
         mockMvc.perform(post(ApiPath.MEMBER_JOIN).content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code").value("0"))
-                .andExpect(jsonPath("$.message").value(JOIN_SUCCESS))
+                .andExpect(jsonPath("$.message").value(ResponseMessage.JOIN_SUCCESS))
                 .andExpect(jsonPath("$.errors").doesNotExist())
                 .andExpect(jsonPath("$.data.id").exists())
                 .andExpect(jsonPath("$.data.email").value("email@example.com"))
                 .andExpect(jsonPath("$.data.name").value("이름"))
                 .andExpect(jsonPath("$.data.nickname").value("닉네임"))
-                .andExpect(header().string("Location", containsString("api/v1/members/")))
+                .andExpect(header().string("Location", containsString(ApiPath.MEMBER)))
                 .andDo(
                         doc(
-                                JOIN_SUCCESS_CASE + "/deleted",
-                                MEMBER_JOIN_REQUEST_FIELDS,
-                                successResponseWithDataFields()));
+                                DocumentIdentifier.JOIN_SUCCESS_CASE + "/deleted",
+                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION)
+                                                .description("생성된 리소스의 URI")),
+                                CommonSnippet.successResponseWithDataFields()));
     }
 }

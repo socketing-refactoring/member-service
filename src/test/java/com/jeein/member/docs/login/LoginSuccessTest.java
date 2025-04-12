@@ -1,7 +1,6 @@
 package com.jeein.member.docs.login;
 
 import static com.jeein.member.ResponseMessage.LOGIN_SUCCESS;
-import static com.jeein.member.docs.DocumentIdentifier.*;
 import static com.jeein.member.docs.RestDocsUtil.doc;
 import static com.jeein.member.docs.snippets.CommonSnippet.successResponseWithDataFields;
 import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_LOGIN_REQUEST_FIELDS;
@@ -13,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
+import com.jeein.member.docs.DocumentIdentifier;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.dto.request.LoginRequestDTO;
 import com.jeein.member.service.MemberService;
@@ -84,7 +84,7 @@ public class LoginSuccessTest {
                 .andExpect(jsonPath("$.data.nickname").value("닉네임"))
                 .andDo(
                         doc(
-                                LOGIN_SUCCESS_BASE,
+                                DocumentIdentifier.LOGIN_SUCCESS_BASE,
                                 MEMBER_LOGIN_REQUEST_FIELDS,
                                 successResponseWithDataFields()));
     }

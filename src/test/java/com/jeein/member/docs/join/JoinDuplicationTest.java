@@ -1,9 +1,6 @@
-package com.jeein.member.docs.login;
+package com.jeein.member.docs.join;
 
-import static com.jeein.member.docs.DocumentIdentifier.*;
 import static com.jeein.member.docs.RestDocsUtil.doc;
-import static com.jeein.member.docs.snippets.CommonSnippet.errorCodeOnlyResponseFields;
-import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_LOGIN_REQUEST_FIELDS;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,8 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
+import com.jeein.member.docs.DocumentIdentifier;
+import com.jeein.member.docs.snippets.CommonSnippet;
+import com.jeein.member.docs.snippets.MemberSnippet;
 import com.jeein.member.dto.request.JoinRequestDTO;
-import com.jeein.member.dto.request.LoginRequestDTO;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +34,8 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @Transactional
 @ExtendWith(RestDocumentationExtension.class)
-@DisplayName("로그인 실패 예외 테스트")
-public class LoginExceptionTest {
+@DisplayName("회원가입 실패 중복 예외 테스트")
+public class JoinDuplicationTest {
 
     @Autowired private WebApplicationContext context;
 
@@ -64,44 +63,46 @@ public class LoginExceptionTest {
     }
 
     @Test
-    @DisplayName("로그인 요청 이메일을 찾을 수 없으면 403 에러와 메시지를 반환한다.")
-    void login_withInvalidEmail_shouldReturnForbidden() throws Exception {
-        LoginRequestDTO loginRequest = LoginRequestDTO.of("invalid_email@example.com", "password");
+    @DisplayName("회원가입 요청 이메일이 이미 존재하면 409 에러와 메시지를 반환한다.")
+    void joinMember_emailAlreadyExists() throws Exception {
+        JoinRequestDTO duplicateRequest =
+                JoinRequestDTO.of("email@example.com", "새 이름", "새 닉네임", "password");
 
-        ErrorCode errorCode = ErrorCode.INVALID_MEMBER;
+        ErrorCode errorCode = ErrorCode.ALREADY_EXISTING_EMAIL;
         mockMvc.perform(
-                        post(ApiPath.MEMBER_LOGIN)
-                                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isForbidden())
+                        post(ApiPath.MEMBER_JOIN)
+                                .content(objectMapper.writeValueAsString(duplicateRequest)))
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(errorCode.getCode()))
                 .andExpect(jsonPath("$.message").value(errorCode.getMessage()))
                 .andExpect(jsonPath("$.errors").doesNotExist())
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andDo(
                         doc(
-                                LOGIN_EXCEPTION_INVALID_EMAIL,
-                                MEMBER_LOGIN_REQUEST_FIELDS,
-                                errorCodeOnlyResponseFields()));
+                                DocumentIdentifier.JOIN_DUPLICATION_EMAIL,
+                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
+                                CommonSnippet.errorCodeOnlyResponseFields()));
     }
 
     @Test
-    @DisplayName("로그인 요청 비밀번호가 불일치하면 403 에러와 메시지를 반환한다.")
-    void login_withInvalidPassword_shouldReturnForbidden() throws Exception {
-        LoginRequestDTO loginRequest = LoginRequestDTO.of("email@example.com", "wrong_password");
+    @DisplayName("회원가입 요청 닉네임이 이미 존재하면 409 에러와 메시지를 반환한다.")
+    void joinMember_nicknameAlreadyExists() throws Exception {
+        JoinRequestDTO duplicateRequest =
+                JoinRequestDTO.of("another@example.com", "이름", "닉네임", "password");
 
-        ErrorCode errorCode = ErrorCode.INVALID_PASSWORD;
+        ErrorCode errorCode = ErrorCode.ALREADY_EXISTING_NICKNAME;
         mockMvc.perform(
-                        post(ApiPath.MEMBER_LOGIN)
-                                .content(objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isForbidden())
+                        post(ApiPath.MEMBER_JOIN)
+                                .content(objectMapper.writeValueAsString(duplicateRequest)))
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(errorCode.getCode()))
                 .andExpect(jsonPath("$.message").value(errorCode.getMessage()))
                 .andExpect(jsonPath("$.errors").doesNotExist())
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andDo(
                         doc(
-                                LOGIN_EXCEPTION_INVALID_PASSWORD,
-                                MEMBER_LOGIN_REQUEST_FIELDS,
-                                errorCodeOnlyResponseFields()));
+                                DocumentIdentifier.JOIN_DUPLICATION_NICKNAME,
+                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
+                                CommonSnippet.errorCodeOnlyResponseFields()));
     }
 }
