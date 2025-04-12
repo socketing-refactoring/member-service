@@ -1,15 +1,22 @@
 repos:
-  - repo: local
+  - repo: "local"
     hooks:
-      - id: formatting-test-docs
-        name: Execute Gradle Check, Test, AsciidocTask
-        entry: bash -c ./gradlew check --info
-        language: system
+      - id: "formatting-test"
+        name: "Execute Gradle Check, Test"
+        entry: "bash -c './gradlew check'"
+        language: "system"
         pass_filenames: false
-  - repo: local
+  - repo: "local"
     hooks:
-      - id: publish-docs
-        name: Execute Gradle GitPublish
-        language: system
-        entry: bash -c ./gradlew gitPublishPush
+      - id: "create-docs"
+        name: "Execute Gradle Asciidoc"
+        language: "system"
+        entry: "bash -c './gradlew asciidoctor'"
+        pass_filenames: false
+  - repo: "local"
+    hooks:
+      - id: "publish-docs"
+        name: "Execute Gradle GitPublish"
+        language: "system"
+        entry: "bash -c './gradlew gitPublishPush'"
         pass_filenames: false

@@ -1,11 +1,11 @@
 spring:
   application:
-    name: member-service
+    name: "member-service"
   profiles:
-    active: dev
+    active: "dev"
   config:
     import: "${SPRING_CLOUD_CONFIG_URI}"
   cloud:
     config:
-      name: member-service
-      profile: dev
+      name: "member-service"
+      profile: "dev"

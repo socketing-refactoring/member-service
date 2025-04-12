@@ -2,18 +2,18 @@ server:
   port: 8081
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/test_socketing
-    username: jeein
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/test_socketing"
+    username: "jeein"
     password: 12345678
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
   jpa:
-    database: postgresql
+    database: "postgresql"
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: "update"
     properties:
       hibernate:
         format_sql: true
@@ -22,12 +22,12 @@ eureka:
   client:
     enabled: false
 logging:
-  config: classpath:logback-spring.xml
+  config: "classpath:logback-spring.xml"
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
   endpoint:
     prometheus:
       enabled: true
@@ -47,15 +47,15 @@ management:
       enabled: true
     info:
       enabled: true
-    show-details: always
+    show-details: "always"
 springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
+  default-consumes-media-type: "application/json"
+  default-produces-media-type: "application/json"
   show-actuator: false
   api-docs:
-    path: /api/v1/members/api/json
+    path: "/api/v1/members/api/json"
   swagger-ui:
-    path: /api/v1/members/api/docs
-    operations-sorter: alpha
+    path: "/api/v1/members/api/docs"
+    operations-sorter: "alpha"
     disable-swagger-default-url: true
     display-request-duration: true

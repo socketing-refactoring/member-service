@@ -98,7 +98,6 @@ spotless {
     yaml {
         target("**/*.yml", "**/*.yaml")
         jackson()
-            .yamlFeature("MINIMIZE_QUOTES", true)
             .yamlFeature("ALWAYS_QUOTE_NUMBERS_AS_STRINGS", false)
             .yamlFeature("WRITE_DOC_START_MARKER", false)
             .yamlFeature("INDENT_ARRAYS_WITH_INDICATOR", true)
@@ -178,11 +177,9 @@ val asciidoctorTask =
 
             attributes(
                 mapOf(
-                    "outfilesuffix" to ".html"
-                )
+                    "outfilesuffix" to ".html",
+                ),
             )
-
-
         }
     }
 
@@ -201,6 +198,11 @@ tasks.named<Jar>("jar") {
 }
 
 val asciidoctorOutputDir = layout.buildDirectory.dir("docs/asciidoc/member-service")
+
+// Publishing Document
+tasks.named("gitPublishCommit") {
+    dependsOn("asciidoctor")
+}
 
 gitPublish {
     repoUri.set("git@github.com:socketing-refactoring/socketing-refactoring.github.io.git")

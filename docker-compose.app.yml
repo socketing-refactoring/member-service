@@ -1,7 +1,7 @@
 services:
   member:
     image: "${DOCKER_USERNAME}/socketing:member-service"
-    network_mode: host
-    container_name: member-service-app
+    network_mode: "host"
+    container_name: "member-service-app"
     volumes:
-      - ./logs:/app/logs
+      - "./logs:/app/logs"
