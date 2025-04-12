@@ -174,6 +174,7 @@ val asciidoctorTask =
                 },
             )
 
+            baseDirFollowsSourceFile() // required to include adoc into index.adoc
             setOutputDir(layout.buildDirectory.dir("docs/asciidoc/member-service"))
 
             attributes(
