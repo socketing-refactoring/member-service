@@ -1,8 +1,6 @@
 package com.jeein.member.docs.login;
 
 import static com.jeein.member.docs.RestDocsUtil.doc;
-import static com.jeein.member.docs.snippets.CommonSnippet.errorResponseFields;
-import static com.jeein.member.docs.snippets.MemberSnippet.MEMBER_LOGIN_REQUEST_FIELDS;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -154,6 +152,6 @@ public class LoginRequestValidationTest {
                                                 ErrorCode.INVALID_REQUEST_VALUE.getMessage())))
                 .andExpect(jsonPath("$.errors[0].field").value(expectedField))
                 .andExpect(jsonPath("$.data").doesNotExist())
-                .andDo(doc(docDirectory, MEMBER_LOGIN_REQUEST_FIELDS, errorResponseFields()));
+                .andDo(doc(docDirectory));
     }
 }

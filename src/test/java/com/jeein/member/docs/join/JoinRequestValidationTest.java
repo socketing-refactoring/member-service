@@ -12,8 +12,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeein.member.docs.ApiPath;
 import com.jeein.member.docs.DocumentIdentifier;
-import com.jeein.member.docs.snippets.CommonSnippet;
-import com.jeein.member.docs.snippets.MemberSnippet;
 import com.jeein.member.dto.request.JoinRequestDTO;
 import com.jeein.member.exception.ErrorCode;
 import com.jeein.member.service.MemberService;
@@ -197,10 +195,6 @@ public class JoinRequestValidationTest {
                                                 ErrorCode.INVALID_REQUEST_VALUE.getMessage())))
                 .andExpect(jsonPath("$.errors[0].field").value(expectedField))
                 .andExpect(jsonPath("$.data").doesNotExist())
-                .andDo(
-                        doc(
-                                docIdentifier,
-                                MemberSnippet.MEMBER_JOIN_REQUEST_FIELDS,
-                                CommonSnippet.errorResponseFields()));
+                .andDo(doc(docIdentifier));
     }
 }

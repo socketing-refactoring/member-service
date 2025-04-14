@@ -8,6 +8,7 @@ plugins {
     id("com.diffplug.spotless") version "7.0.2"
     id("org.asciidoctor.jvm.convert") version "4.0.4"
     id("org.ajoberstar.git-publish") version "4.2.0"
+    id("com.epages.restdocs-api-spec") version "0.18.4"
     id("org.ec4j.editorconfig") version "0.1.0"
     id("java")
     id("checkstyle")
@@ -42,7 +43,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+//    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     implementation("org.postgresql:postgresql:42.6.2")
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.micrometer:micrometer-registry-prometheus:1.15.0-M2")
@@ -53,7 +54,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
     testImplementation("net.bytebuddy:byte-buddy-agent:1.15.11")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("com.h2database:h2")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.18.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
@@ -176,15 +177,6 @@ val asciidoctorTask =
 
             baseDirFollowsSourceFile() // required to include adoc into index.adoc
             setOutputDir(layout.buildDirectory.dir("docs/asciidoc/member-service"))
-
-            attributes(
-                mapOf(
-                    "snippets" to file("build/generated-snippets"),
-                    "outfilesuffix" to ".html",
-                    "relfileprefix" to "",
-                    "xrefstyle" to "short",
-                ),
-            )
         }
     }
 
@@ -193,7 +185,7 @@ tasks.named<BootJar>("bootJar") {
     archiveFileName.set("member-service.jar")
     dependsOn(asciidoctorTask)
 
-    from(asciidoctorTask.map { it.outputDir.resolve("member-service") }) {
+    from(asciidoctorTask.map { it.outputDir }) {
         into("static/docs")
     }
 }
@@ -211,7 +203,7 @@ tasks.named("gitPublishCopy") {
 
 gitPublish {
     repoUri.set("git@github.com:socketing-refactoring/socketing-refactoring.github.io.git")
-    branch.set("gh-pages")
+    branch.set("main")
     contents {
         from(asciidoctorOutputDir) {
             into("docs/member-service")
@@ -222,4 +214,22 @@ gitPublish {
         }
     }
     commitMessage.set("Update Member Service API documentation")
+}
+
+openapi3 {
+    this.setServer("https://api.socketing.jeein.xyz")
+    title = "My API"
+    description = "My API description"
+    version = "0.1.0"
+    format = "json" // or json
+}
+
+tasks.register<Copy>("copyOasToSwagger") {
+    delete("src/main/resources/static/api/json.json")
+    from(layout.buildDirectory.dir("/api-spec")) {
+        include("openapi3.json")
+        rename("openapi3.json", "json.json")
+    }
+    into("src/main/resources/static/api/")
+    dependsOn("openapi3")
 }
