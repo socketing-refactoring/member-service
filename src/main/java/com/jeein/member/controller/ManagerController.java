@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/managers/managers")
+@RequestMapping("/api/v1/managers")
 @RequiredArgsConstructor
 public class ManagerController {
 
