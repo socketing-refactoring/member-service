@@ -180,20 +180,6 @@ val asciidoctorTask =
         }
     }
 
-// Packaging Jar
-tasks.named<BootJar>("bootJar") {
-    archiveFileName.set("member-service.jar")
-    dependsOn(asciidoctorTask)
-
-    from(asciidoctorTask.map { it.outputDir }) {
-        into("static/docs")
-    }
-}
-
-tasks.named<Jar>("jar") {
-    enabled = false
-}
-
 val asciidoctorOutputDir = layout.buildDirectory.dir("docs/asciidoc/member-service")
 
 // Publishing Document
@@ -221,15 +207,24 @@ openapi3 {
     title = "My API"
     description = "My API description"
     version = "0.1.0"
-    format = "json" // or json
+    format = "json" // or yml
 }
 
-tasks.register<Copy>("copyOasToSwagger") {
-    delete("src/main/resources/static/api/json.json")
-    from(layout.buildDirectory.dir("/api-spec")) {
-        include("openapi3.json")
-        rename("openapi3.json", "json.json")
+// Packaging Jar
+tasks.named<BootJar>("bootJar") {
+    dependsOn(asciidoctorTask, tasks.named("openapi3"))
+
+    archiveFileName.set("member-service.jar")
+
+    from(asciidoctorTask.map { it.outputDir }) {
+        into("static/docs/asciidoc")
     }
-    into("src/main/resources/static/api/")
-    dependsOn("openapi3")
+
+    from(layout.buildDirectory.dir("api-spec")) {
+        into("static/docs/openapi")
+    }
+}
+
+tasks.named<Jar>("jar") {
+    enabled = false
 }

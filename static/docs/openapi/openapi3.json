@@ -1,0 +1,389 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "My API",
+    "description" : "My API description",
+    "version" : "0.1.0"
+  },
+  "servers" : [ {
+    "url" : "https://api.socketing.jeein.xyz"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/api/v1/members/join" : {
+      "post" : {
+        "tags" : [ "api" ],
+        "operationId" : "join/",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/api-v1-members-join-2091341712"
+              },
+              "examples" : {
+                "join/duplication/email" : {
+                  "value" : "{\r\n  \"email\" : \"email@example.com\",\r\n  \"name\" : \"새 이름\",\r\n  \"nickname\" : \"새 닉네임\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "join/duplication/nickname" : {
+                  "value" : "{\r\n  \"email\" : \"another@example.com\",\r\n  \"name\" : \"이름\",\r\n  \"nickname\" : \"닉네임\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "join/success/base" : {
+                  "value" : "{\r\n  \"email\" : \"email@example.com\",\r\n  \"name\" : \"이름\",\r\n  \"nickname\" : \"닉네임\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "join/success/case/deleted" : {
+                  "value" : "{\r\n  \"email\" : \"email@example.com\",\r\n  \"name\" : \"이름\",\r\n  \"nickname\" : \"닉네임\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "join/validation/email/blank" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"\"\r\n}"
+                },
+                "join/validation/email/null" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : null\r\n}"
+                },
+                "join/validation/email/pattern" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"invalid-email\"\r\n}"
+                },
+                "join/validation/email/size" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com\"\r\n}"
+                },
+                "join/validation/name/blank" : {
+                  "value" : "{\r\n  \"name\" : \"\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/name/null" : {
+                  "value" : "{\r\n  \"name\" : null,\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/name/size" : {
+                  "value" : "{\r\n  \"name\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/nickname/blank" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/nickname/null" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : null,\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/nickname/size" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n  \"password\" : \"password123\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/password/blank" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/password/null" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : null,\r\n  \"email\" : \"test@example.com\"\r\n}"
+                },
+                "join/validation/password/size" : {
+                  "value" : "{\r\n  \"name\" : \"홍길동\",\r\n  \"nickname\" : \"길동이\",\r\n  \"password\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n  \"email\" : \"test@example.com\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "409" : {
+            "description" : "409",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join-1331249008"
+                },
+                "examples" : {
+                  "join/duplication/email" : {
+                    "value" : "{\r\n  \"message\" : \"이미 가입된 계정입니다.\",\r\n  \"code\" : \"AJ_001\"\r\n}"
+                  },
+                  "join/duplication/nickname" : {
+                    "value" : "{\r\n  \"message\" : \"사용 중인 닉네임입니다.\",\r\n  \"code\" : \"AJ_002\"\r\n}"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201",
+            "headers" : {
+              "Location" : {
+                "description" : "생성된 리소스의 URI",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join-1872540796"
+                },
+                "examples" : {
+                  "join/success/base" : {
+                    "value" : "{\r\n  \"message\" : \"회원가입이 성공적으로 이루어졌습니다.\",\r\n  \"code\" : \"0\",\r\n  \"data\" : {\r\n    \"id\" : \"fd98f4e6-a2c0-4b4c-930c-889d2da02680\",\r\n    \"name\" : \"이름\",\r\n    \"nickname\" : \"닉네임\",\r\n    \"email\" : \"email@example.com\"\r\n  }\r\n}"
+                  },
+                  "join/success/case/deleted" : {
+                    "value" : "{\r\n  \"message\" : \"회원가입이 성공적으로 이루어졌습니다.\",\r\n  \"code\" : \"0\",\r\n  \"data\" : {\r\n    \"id\" : \"fbbadee4-0f6b-4d08-b8e9-7e2cee6ccd08\",\r\n    \"name\" : \"이름\",\r\n    \"nickname\" : \"닉네임\",\r\n    \"email\" : \"email@example.com\"\r\n  }\r\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join486549215"
+                },
+                "examples" : {
+                  "join/validation/email/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이메일은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/email/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이메일은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/email/pattern" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"invalid-email\",\r\n    \"reason\" : \"이메일을 형식에 맞게 입력해 주세요.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/email/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com\",\r\n    \"reason\" : \"이메일을 50자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/name/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"name\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이름은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/name/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"name\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이름은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/name/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"name\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n    \"reason\" : \"이름을 20자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/nickname/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"nickname\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"닉네임은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/nickname/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"nickname\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"닉네임은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/nickname/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"nickname\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n    \"reason\" : \"닉네임을 20자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/password/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"비밀번호는 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/password/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"비밀번호는 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "join/validation/password/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n    \"reason\" : \"비밀번호를 20자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/members/login" : {
+      "post" : {
+        "tags" : [ "api" ],
+        "operationId" : "login/",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/api-v1-members-login-788118888"
+              },
+              "examples" : {
+                "login/mismatch/email" : {
+                  "value" : "{\r\n  \"email\" : \"invalid_email@example.com\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "login/mismatch/password" : {
+                  "value" : "{\r\n  \"email\" : \"email@example.com\",\r\n  \"password\" : \"wrong_password\"\r\n}"
+                },
+                "login/success/base" : {
+                  "value" : "{\r\n  \"email\" : \"email@example.com\",\r\n  \"password\" : \"password\"\r\n}"
+                },
+                "login/validation/email/blank" : {
+                  "value" : "{\r\n  \"email\" : \"\",\r\n  \"password\" : \"password123\"\r\n}"
+                },
+                "login/validation/email/null" : {
+                  "value" : "{\r\n  \"email\" : null,\r\n  \"password\" : \"password123\"\r\n}"
+                },
+                "login/validation/email/pattern" : {
+                  "value" : "{\r\n  \"email\" : \"invalid-email\",\r\n  \"password\" : \"password123\"\r\n}"
+                },
+                "login/validation/email/size" : {
+                  "value" : "{\r\n  \"email\" : \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com\",\r\n  \"password\" : \"password123\"\r\n}"
+                },
+                "login/validation/password/blank" : {
+                  "value" : "{\r\n  \"email\" : \"test@example.com\",\r\n  \"password\" : \"\"\r\n}"
+                },
+                "login/validation/password/null" : {
+                  "value" : "{\r\n  \"email\" : \"test@example.com\",\r\n  \"password\" : null\r\n}"
+                },
+                "login/validation/password/size" : {
+                  "value" : "{\r\n  \"email\" : \"test@example.com\",\r\n  \"password\" : \"aaaaaaaaaaaaaaaaaaaaa\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "403" : {
+            "description" : "403",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join-1331249008"
+                },
+                "examples" : {
+                  "login/mismatch/email" : {
+                    "value" : "{\r\n  \"message\" : \"가입되지 않은 사용자입니다.\",\r\n  \"code\" : \"AL_001\"\r\n}"
+                  },
+                  "login/mismatch/password" : {
+                    "value" : "{\r\n  \"message\" : \"비밀번호를 다시 확인해 주세요.\",\r\n  \"code\" : \"AL_001\"\r\n}"
+                  }
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join-1872540796"
+                },
+                "examples" : {
+                  "login/success/base" : {
+                    "value" : "{\r\n  \"message\" : \"로그인이 성공적으로 이루어졌습니다.\",\r\n  \"code\" : \"0\",\r\n  \"data\" : {\r\n    \"id\" : \"1c19b244-7a0a-437a-a8ed-878e5d944e26\",\r\n    \"email\" : \"email@example.com\",\r\n    \"name\" : \"이름\",\r\n    \"nickname\" : \"닉네임\"\r\n  }\r\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-members-join486549215"
+                },
+                "examples" : {
+                  "login/validation/email/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이메일은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/email/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"이메일은 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/email/pattern" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"invalid-email\",\r\n    \"reason\" : \"must be a well-formed email address\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/email/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"email\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com\",\r\n    \"reason\" : \"이메일은 1자 이상 50자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/password/blank" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"비밀번호는 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/password/null" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"\",\r\n    \"reason\" : \"비밀번호는 필수입니다.\"\r\n  } ]\r\n}"
+                  },
+                  "login/validation/password/size" : {
+                    "value" : "{\r\n  \"message\" : \"요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.\",\r\n  \"code\" : \"C_001\",\r\n  \"errors\" : [ {\r\n    \"field\" : \"password\",\r\n    \"value\" : \"aaaaaaaaaaaaaaaaaaaaa\",\r\n    \"reason\" : \"비밀번호는 1자 이상 50자 이하로 입력해 주세요.\"\r\n  } ]\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "api-v1-members-join-1331249008" : {
+        "required" : [ "code", "message" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "에러 코드"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "에러 메시지"
+          }
+        }
+      },
+      "api-v1-members-join-1872540796" : {
+        "required" : [ "code", "message" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "성공 코드"
+          },
+          "data" : {
+            "required" : [ "email", "id", "name", "nickname" ],
+            "type" : "object",
+            "properties" : {
+              "nickname" : {
+                "type" : "string",
+                "description" : "회원 닉네임"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "회원 이름"
+              },
+              "id" : {
+                "type" : "string",
+                "description" : "회원 ID"
+              },
+              "email" : {
+                "type" : "string",
+                "description" : "회원 이메일"
+              }
+            },
+            "description" : "응답 값"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "성공 메시지"
+          }
+        }
+      },
+      "api-v1-members-join-2091341712" : {
+        "required" : [ "email", "name", "password" ],
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "nickname" : {
+            "type" : "string",
+            "description" : "닉네임",
+            "nullable" : true
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "이름"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
+          }
+        }
+      },
+      "api-v1-members-login-788118888" : {
+        "required" : [ "email", "password" ],
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
+          }
+        }
+      },
+      "api-v1-members-join486549215" : {
+        "type" : "object"
+      }
+    }
+  }
+}
