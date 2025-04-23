@@ -60,6 +60,11 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.deleteManager(id));
     }
 
+    @DeleteMapping("/{id}/hard")
+    public ResponseEntity<CommonResponseDTO<Void>> hardDeleteManager(@PathVariable String id) {
+        return ResponseEntity.ok(managerService.hardDeleteManager(id));
+    }
+
     /*----------------------------------
      * ManagerFeignClient
     ----------------------------------*/
