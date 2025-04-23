@@ -177,7 +177,7 @@ public class ManagerService {
         return CommonResponseDTO.success("비밀번호 변경이 성공적으로 이루어졌습니다.", "0", null);
     }
 
-    // 매니저 삭제
+    // 매니저 소프트 삭제
     @Transactional
     public CommonResponseDTO<Void> deleteManager(String id) {
         Manager manager =
@@ -189,5 +189,19 @@ public class ManagerService {
         managerRepository.softDelete(manager.getId(), Instant.now());
 
         return CommonResponseDTO.success("매니저 탈퇴가 성공적으로 이루어졌습니다.", "0", null);
+    }
+
+    // 매니저 하드 삭제
+    @Transactional
+    public CommonResponseDTO<Void> hardDeleteManager(String id) {
+        Manager manager =
+                managerRepository
+                        .findById(UUID.fromString(id))
+                        .orElseThrow(() -> new ManagerException(ErrorCode.MEMBER_NOT_FOUND));
+        log.debug("selected manager: {}", manager);
+
+        managerRepository.delete(manager);
+
+        return CommonResponseDTO.success("매니저 하드 삭제갸 성공적으로 이루어졌습니다.", "0", null);
     }
 }
